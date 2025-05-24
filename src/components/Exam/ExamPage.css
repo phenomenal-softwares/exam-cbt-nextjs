@@ -1,0 +1,160 @@
+.exam-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-family: sans-serif;
+}
+
+.exam-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.exam-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.exam-header p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.exam-header h3 {
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.timer {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #b30000;
+}
+
+.question-box {
+  margin-bottom: 2rem;
+}
+
+.question-box h4 {
+  margin-bottom: 0.5rem;
+}
+
+.question-box p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.options label {
+  background-color: #f4f4f4;
+  padding: 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.options label:hover {
+  background-color: #e2e2e2;
+}
+
+.options input {
+  margin-right: 0.5rem;
+}
+
+.prev-next-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.question-nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.question-nav-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+.question-nav-button.answered {
+  background-color: #4caf50; /* green */
+  color: white;
+}
+
+.question-nav-button.unanswered {
+  background-color: #f8d7da; /* pale red */
+  color: #721c24;
+}
+
+.question-nav-button.active {
+  border: 2px solid #000;
+}
+
+.option {
+  padding: 0.6rem;
+  background: #eee;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.option.selected {
+  background: #d1e7dd;
+  font-weight: bold;
+}
+
+.submit-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

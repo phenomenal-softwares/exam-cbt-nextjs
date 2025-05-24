@@ -1,0 +1,6 @@
+.student-photo {
+  border-radius: 50%;
+  object-fit: cover;
+  height: 80px;
+  width: 80px;
+}

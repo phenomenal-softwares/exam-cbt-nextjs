@@ -1,0 +1,38 @@
+.letterhead {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+  background-color: blueviolet;
+  padding: 10px 30px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.logo-container img {
+  border-radius: 50%;
+}
+
+.letterhead-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: -100px;
+}
+
+.school-name {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.school-address,
+.exam-portal {
+  font-size: 14px;
+  margin: 0;
+}
