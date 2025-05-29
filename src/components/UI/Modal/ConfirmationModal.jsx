@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import "./ModalStyles.css"; // shared styles for modals
+import "./ModalStyles.css";
 
 const ConfirmationModal = ({
   title,
   message,
-  confirmText = "Confirm",
-  cancelText = "Return",
+  confirmText,
+  cancelText,
   onConfirm,
   onCancel,
 }) => {

@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import ExamPage from "@/components/Exam/ExamPage";
+import NoDataError from "@/components/Error/NoDataError";
 
 const ExamRoutePage = () => {
   const searchParams = useSearchParams();
@@ -9,6 +10,10 @@ const ExamRoutePage = () => {
   const classLevel = searchParams.get("classLevel");
   const name = searchParams.get("name");
   const uid = searchParams.get("uid");
+
+  if (!subject || !classLevel || !name || !uid) {
+    return <NoDataError />;
+  }
 
   return <ExamPage subject={subject} classLevel={classLevel} name={name} uid={uid} />;
 };

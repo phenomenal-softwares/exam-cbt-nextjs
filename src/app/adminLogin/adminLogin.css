@@ -1,0 +1,113 @@
+.admin-login-container {
+  min-height: 100vh;
+  background: linear-gradient(to right, #1e1e2f, #2e2e3e);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  padding: 2rem;
+}
+
+.admin-login-form {
+  background-color: ivory;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  max-width: 420px;
+  width: 100%;
+}
+
+.admin-login-form h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  text-align: center;
+  color: #4b0082;
+}
+
+.admin-login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.input {
+  width: 95%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  border-color: #4b0082;
+  box-shadow: 0 0 5px rgba(75, 0, 130, 0.3);
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper .input {
+  padding-right: 3rem;
+}
+
+.password-input-wrapper button {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background-color: #4b0082;
+  color: ivory;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+}
+
+.login-btn:hover {
+  background-color: #5f1aa3;
+  transform: scale(1.02);
+}
+
+.error {
+  color: crimson;
+  font-size: 0.9rem;
+  margin-top: -0.8rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.back-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.back-link a {
+  color: #4b0082;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+.login-btn:hover {
+  box-shadow: 0 0 10px #4b0082aa;
+}

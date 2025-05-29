@@ -1,0 +1,39 @@
+.batchFormContainer {
+  padding: 2rem;
+  max-width: 900px;
+  margin: auto;
+  font-family: sans-serif;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.topSection select,
+.topSection input[type="file"] {
+  margin: 5px;
+  padding: 6px;
+}
+.studentFields {
+  margin-top: 20px;
+}
+.studentRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.studentRow input {
+  flex: 1;
+  padding: 6px;
+}
+button {
+  margin-top: 15px;
+  padding: 8px 20px;
+  background: blueviolet;
+  color: ivory;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+}

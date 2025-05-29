@@ -4,15 +4,17 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { useRouter } from "next/navigation";
-import Letterhead from "../Letterhead/Letterhead";
 
+import Letterhead from "../UI/Letterhead/Letterhead";
 import LoadingOverlay from "../UI/LoadingOverlay/LoadingOverlay";
+import PasswordVisibility from "../UI/PasswordVisibility/PasswordVisibility";
 
 import "./authStyles.css";
 
 export default function LoginForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -57,29 +59,32 @@ export default function LoginForm() {
           />
           <input
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
             required
-            className='input'
+            className="input"
           />
+          <PasswordVisibility
+            visible={showPassword}
+            setVisible={setShowPassword}
+          />
+
           {error && <p className="error">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="primaryBtn"
-          >
+          <button type="submit" disabled={loading} className="primaryBtn">
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <div className="links">
-          <a href="/recover" className="forgot-password">Forgot Password?</a>
+          <a href="/recover" className="forgot-password">
+            Forgot Password?
+          </a>
           <a href="/signup" className="secondaryBtn">
             Not registered? Sign Up
           </a>
-          <a href="/admin-login" className="outlineBtn">
+          <a href="/adminLogin" className="outlineBtn">
             Login as Admin
           </a>
         </div>

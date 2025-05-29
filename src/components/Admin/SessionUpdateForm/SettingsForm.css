@@ -1,0 +1,52 @@
+.settings-form-box {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.session-input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.update-btn {
+  background: blueviolet;
+  color: ivory;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  margin-top: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.update-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.warning-text {
+  background: #fff3cd;
+  border-left: 6px solid #ffc107;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #856404;
+  font-size: 0.95rem;
+}
+
+.success-text {
+  color: green;
+  margin-top: 1rem;
+}
+
+.error-text {
+  color: red;
+  margin-top: 1rem;
+}

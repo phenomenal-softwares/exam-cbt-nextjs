@@ -6,6 +6,9 @@ import { db } from "@/services/firebase";
 import SuccessModal from "@/components/UI/Modal/SuccessModal";
 import { useRouter } from "next/navigation";
 import { updateSubjectExamStatus } from "@/utils/updateSubjectExamStatus";
+import LoadingOverlay from "../UI/LoadingOverlay/LoadingOverlay";
+import ConfirmationModal from "../UI/Modal/ConfirmationModal";
+import Letterhead from "../UI/Letterhead/Letterhead";
 
 import "./ExamPage.css";
 
@@ -18,6 +21,7 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   const [answers, setAnswers] = useState(Array(20).fill(null));
   const [submitted, setSubmitted] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const router = useRouter();
 
@@ -80,7 +84,7 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
 
     try {
       await updateSubjectExamStatus(uid, subject, score);
-
+      setShowConfirmation(false);
       setSubmitted(true);
       setShowModal(true);
     } catch (error) {
@@ -100,93 +104,113 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
     console.log("Logout function called");
   };
 
-  if (loading) return <p>Loading questions...</p>;
+  if (loading) return <LoadingOverlay />;
   if (!questions.length) return <p>No questions found for this exam.</p>;
 
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div className="exam-container">
-      <div className="exam-header">
-        <h2>Exam: {subject}</h2>
-        <p>Time Left: {formatTime(timeLeft)}</p>
-      </div>
+    <div className="main-container">
+      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <div className="exam-container">
+        <div className="exam-header">
+          <h3>{name}</h3>
+          <h3>Subject: {subject}</h3>
+          <h3>Class: {classLevel}</h3>
+        </div>
+        <p className="timer">Time Left: {formatTime(timeLeft)}</p>
 
-      <div className="question-card">
-        <h4>Question {currentQuestionIndex + 1}</h4>
-        <p>{currentQuestion.question}</p>
+        <div className="question-card">
+          <h4>Question {currentQuestionIndex + 1}</h4>
+          <p>{currentQuestion.question}</p>
 
-        <div className="options">
-          {currentQuestion.options.map((option, idx) => (
-            <label key={idx} className="option-label">
-              <input
-                type="radio"
-                name={`question-${currentQuestionIndex}`}
-                value={option}
-                checked={studentAnswers[currentQuestionIndex] === option}
-                onChange={() =>
-                  handleAnswerSelect(currentQuestionIndex, option)
-                }
-              />
-              {String.fromCharCode(65 + idx)}. {option}
-            </label>
+          <div className="options">
+            {currentQuestion.options.map((option, idx) => (
+              <label key={idx} className="option-label">
+                <input
+                  type="radio"
+                  name={`question-${currentQuestionIndex}`}
+                  value={option}
+                  checked={studentAnswers[currentQuestionIndex] === option}
+                  onChange={() =>
+                    handleAnswerSelect(currentQuestionIndex, option)
+                  }
+                />
+                {String.fromCharCode(65 + idx)}. {option}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Prev and Next Buttons */}
+        <div className="prev-next-buttons">
+          <button
+            onClick={() => setCurrentQuestionIndex((prev) => prev - 1)}
+            disabled={currentQuestionIndex === 0}
+            className="nav-btn"
+          >
+            Prev
+          </button>
+
+          <button
+            onClick={() => setCurrentQuestionIndex((prev) => prev + 1)}
+            disabled={currentQuestionIndex === questions.length - 1}
+            className="nav-btn"
+          >
+            Next
+          </button>
+        </div>
+
+        {/* Question Navigation Buttons */}
+        <div className="question-nav-buttons">
+          {questions.map((_, index) => (
+            <button
+              key={index}
+              className={`question-nav-button ${
+                studentAnswers[index] !== null ? "answered" : "unanswered"
+              } ${index === currentQuestionIndex ? "active" : ""}`}
+              onClick={() => setCurrentQuestionIndex(index)}
+            >
+              {index + 1}
+            </button>
           ))}
         </div>
-      </div>
 
-      {/* Prev and Next Buttons */}
-      <div className="prev-next-buttons">
-        <button
-          onClick={() => setCurrentQuestionIndex((prev) => prev - 1)}
-          disabled={currentQuestionIndex === 0}
-          className="nav-btn"
-        >
-          Prev
-        </button>
-
-        <button
-          onClick={() => setCurrentQuestionIndex((prev) => prev + 1)}
-          disabled={currentQuestionIndex === questions.length - 1}
-          className="nav-btn"
-        >
-          Next
-        </button>
-      </div>
-
-      {/* Question Navigation Buttons */}
-      <div className="question-nav-buttons">
-        {questions.map((_, index) => (
+        {/* Submit Button */}
+        <div className="submit-container">
           <button
-            key={index}
-            className={`question-nav-button ${
-              studentAnswers[index] !== null ? "answered" : "unanswered"
-            } ${index === currentQuestionIndex ? "active" : ""}`}
-            onClick={() => setCurrentQuestionIndex(index)}
+            onClick={() => setShowConfirmation(true)}
+            disabled={studentAnswers.includes(null) || submitted}
+            className="submit-btn"
           >
-            {index + 1}
+            Submit Exam
           </button>
-        ))}
+        </div>
+
+        {/* Confirmation Modal */}
+        {showConfirmation && (
+          <ConfirmationModal
+            title="Confirm Submission"
+            message="Are you sure you want to submit your exam? This action cannot be undone."
+            confirmText="Yes, Submit Exam"
+            cancelText="No, Return to Exam"
+            onConfirm={handleSubmit}
+            onCancel={() => setShowConfirmation(false)}
+          />
+        )}
+
+        {/* Success modal */}
+        {showModal && (
+          <SuccessModal
+            title="Exam Submitted Successfully"
+            message={`Dear ${name.toUpperCase()}, you have successfully submitted your ${subject.toUpperCase()} exam. Your result will be available on your dashboard shortly!`}
+            primaryLabel="Go to Dashboard"
+            onPrimary={() => router.push("/dashboard")}
+            secondaryLabel="Logout"
+            onSecondary={handleLogout}
+          />
+        )}
       </div>
-
-      <button
-        onClick={handleSubmit}
-        disabled={studentAnswers.includes(null) || submitted}
-        className="submit-btn"
-      >
-        Submit
-      </button>
-
-      {/* Success modal */}
-      {showModal && (
-        <SuccessModal
-          title="Exam Submitted Successfully"
-          message={`Dear ${name.toUpperCase()}, you have successfully submitted your ${subject.toUpperCase()} exam. Your result will be available on your dashboard shortly!`}
-          primaryLabel="Go to Dashboard"
-          onPrimary={() => router.push("/dashboard")}
-          secondaryLabel="Logout"
-          onSecondary={handleLogout}
-        />
-      )}
     </div>
   );
 };

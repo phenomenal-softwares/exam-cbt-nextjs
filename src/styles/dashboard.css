@@ -8,13 +8,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: ivory;
+  min-height: 100vh;
 }
 
 .dashboard-container {
   max-width: 800px;
+  width: 100%;
+  padding: 30px;
   margin: auto;
   background-color: ivory;
   text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .header {
@@ -76,7 +81,9 @@
 }
 
 .auth-buttons {
-  margin: 20px;
+  border-top: 1px solid #221b1c;
+  margin: 30px 20px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
 }
@@ -88,6 +95,14 @@
   cursor: pointer;
 }
 
+.btn-gray {
+  background-color: #221b1c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
 .btn-danger {
   background-color: #dc3545;
   color: white;
@@ -95,6 +110,6 @@
   padding: 8px 12px;
   cursor: pointer;
 }
- button:hover {
+button:hover {
   scale: 1.1;
- }
+}

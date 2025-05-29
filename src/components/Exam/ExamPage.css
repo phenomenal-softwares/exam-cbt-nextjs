@@ -1,15 +1,31 @@
+* {
+  box-sizing: border-box;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: ivory;
+  min-height: 100vh;
+}
+
 .exam-container {
-  max-width: 800px;
+  max-width: 900px;
+  width: 100%;
   margin: 2rem auto;
   padding: 1.5rem;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: ivory;
   border-radius: 10px;
-  font-family: sans-serif;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .exam-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 2rem;
 }
 
@@ -18,9 +34,10 @@
   font-size: 1.8rem;
 }
 
-.exam-header p {
-  font-size: 1rem;
-  color: #555;
+.timer {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #b30000;
 }
 
 .exam-header h3 {
@@ -143,8 +160,14 @@
   font-weight: bold;
 }
 
-.submit-btn {
+.submit-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 1rem;
+}
+
+.submit-btn {
   padding: 0.6rem 1.5rem;
   background-color: green;
   color: white;
@@ -152,6 +175,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  text-align: center;
 }
 
 .submit-btn:disabled {

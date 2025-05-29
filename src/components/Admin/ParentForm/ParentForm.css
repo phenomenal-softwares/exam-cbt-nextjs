@@ -1,0 +1,73 @@
+.parent-form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem;
+  padding: 2rem;
+  background: ivory;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+form .input,
+form select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+form button {
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.5rem;
+  background: blueviolet;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-message {
+  margin-top: 1rem;
+  color: green;
+  font-weight: bold;
+}
+
+.checkbox-group {
+  max-height: 200px; /* Control length */
+  overflow-y: auto; /* Add vertical scroll */
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Scrollbar for better user experience */
+.checkbox-group::-webkit-scrollbar {
+  width: 6px;
+}
+.checkbox-group::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.checkbox-group::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.checkbox-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #333;
+}

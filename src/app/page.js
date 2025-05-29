@@ -1,10 +1,10 @@
-// pages/_app.js or app/page.js
 'use client';
 import { FirebaseProvider, useFirebase } from '../context/FirebaseContext';
-import LoginPage from './login/page';  // Your login page
-import DashboardPage from './dashboard/page';  // Your dashboard page
+import LoginPage from './login/page';
+import DashboardPage from './dashboard/page';
+import LoadingOverlay from '@/components/UI/LoadingOverlay/LoadingOverlay';
 
-export default function App({ Component, pageProps }) {
+export default function App() {
   return (
     <FirebaseProvider>
       <MainApp />
@@ -16,7 +16,7 @@ const MainApp = () => {
   const { user, loading } = useFirebase();
 
   if (loading) {
-    return <div>Loading...</div>;  // Show a loading indicator while Firebase auth is being checked
+    return <LoadingOverlay />;
   }
 
   return (

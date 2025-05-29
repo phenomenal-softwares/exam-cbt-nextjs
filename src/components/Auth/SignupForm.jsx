@@ -7,11 +7,12 @@ import { useRouter } from "next/navigation";
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { generateSubjectList } from "@/utils/generateSubjectList";
-import { generateExamId } from "@/utils/generateExamId";
-import Letterhead from "../Letterhead/Letterhead";
+import { generateStudentId } from "@/utils/generateStudentId";
+import Letterhead from "../UI/Letterhead/Letterhead";
 import LoadingOverlay from "../UI/LoadingOverlay/LoadingOverlay";
 import SuccessModal from "../UI/Modal/SuccessModal";
-import ConfirmationModal from "../UI/Modal/ConfirmationModal";
+import PasswordVisibility from "../UI/PasswordVisibility/PasswordVisibility";
+
 import "./authStyles.css";
 
 export default function SignupForm() {
@@ -21,7 +22,8 @@ export default function SignupForm() {
     email: "",
     password: "",
     confirmPassword: "",
-    class: "",
+    gender: "",
+    studentClass: "",
     department: "",
     photo: null,
   });
@@ -29,6 +31,10 @@ export default function SignupForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,8 +49,11 @@ export default function SignupForm() {
       ["image/jpeg", "image/png"].includes(file.type)
     ) {
       setFormData((prev) => ({ ...prev, photo: file }));
+      setSelectedFileName(file.name); // Update file name state
+      setError("");
     } else {
-      setError("Please upload a valid photo (max 2MB, jpg/png)");
+      setError("Please upload a valid photo (max 5MB, jpg/png)");
+      setSelectedFileName(""); // Reset file name if invalid
     }
   };
 
@@ -60,7 +69,7 @@ export default function SignupForm() {
     }
 
     try {
-      const examId = generateExamId(formData.class, formData.department);
+      const studentId = generateStudentId();
       const subjects = generateSubjectList(formData.department);
 
       const userCredential = await createUserWithEmailAndPassword(
@@ -81,14 +90,15 @@ export default function SignupForm() {
       await setDoc(doc(db, "students", uid), {
         fullName: formData.fullName.toUpperCase(),
         email: formData.email,
-        class: formData.class,
+        gender: formData.gender,
+        class: formData.studentClass,
         department: formData.department,
         subjects,
         photoURL,
-        examId,
+        studentId,
       });
 
-      router.push("/dashboard");
+      setShowSuccessModal(true);
     } catch (err) {
       setError("Error creating account. Please try again.");
       console.error(err);
@@ -103,7 +113,8 @@ export default function SignupForm() {
       formData.email &&
       formData.password &&
       formData.confirmPassword &&
-      formData.class &&
+      formData.gender &&
+      formData.studentClass &&
       formData.department &&
       formData.password === formData.confirmPassword &&
       formData.photo;
@@ -145,8 +156,8 @@ export default function SignupForm() {
           />
           <input
             name="password"
-            type="password"
-            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Password - at least 6 characters"
             value={formData.password}
             onChange={handleChange}
             required
@@ -154,15 +165,43 @@ export default function SignupForm() {
           />
           <input
             name="confirmPassword"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Confirm Password"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
             className="input"
           />
+          <PasswordVisibility
+            visible={showPassword}
+            setVisible={setShowPassword}
+          />
 
           <div className="class-department-wrapper">
+            <div>
+              <h3>Gender</h3>
+              <div className="options">
+                {["Male", "Female"].map((cls) => (
+                  <label
+                    key={cls}
+                    className={`option-label ${
+                      formData.gender === cls ? "selected" : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={cls}
+                      onChange={handleChange}
+                      required
+                      checked={formData.gender === cls}
+                    />
+                    {cls}
+                  </label>
+                ))}
+              </div>
+            </div>
+
             <div>
               <h3>Class</h3>
               <div className="options">
@@ -170,21 +209,23 @@ export default function SignupForm() {
                   <label
                     key={cls}
                     className={`option-label ${
-                      formData.class === cls ? "selected" : ""
+                      formData.studentClass === cls ? "selected" : ""
                     }`}
                   >
                     <input
                       type="radio"
-                      name="class"
+                      name="studentClass"
                       value={cls}
                       onChange={handleChange}
-                      checked={formData.class === cls}
+                      required
+                      checked={formData.studentClass === cls}
                     />
                     {cls}
                   </label>
                 ))}
               </div>
             </div>
+
             <div>
               <h3>Department</h3>
               <div className="options">
@@ -200,6 +241,7 @@ export default function SignupForm() {
                       name="department"
                       value={dept}
                       onChange={handleChange}
+                      required
                       checked={formData.department === dept}
                     />
                     {dept}
@@ -208,18 +250,33 @@ export default function SignupForm() {
               </div>
             </div>
           </div>
+
           <div className="photo-upload-wrapper">
-            <label className="custom-file-label">
-              <span className="file-label-text">
-                Passport Photo (jpg/png, max 2MB)
-              </span>
+            <label htmlFor="passport-upload">
+              {selectedFileName
+                ? `Selected: ${selectedFileName}`
+                : "Passport Photo (jpg/png, max 2MB)"}
               <input
+                id="passport-upload"
                 type="file"
                 onChange={handleFileChange}
                 accept="image/png, image/jpeg"
                 required
-                className="file-input"
+                style={{ display: "none" }}
               />
+            </label>
+          </div>
+
+          <div className="checkbox-wrapper">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={isConfirmed}
+                onChange={(e) => setIsConfirmed(e.target.checked)}
+                required
+              />
+              I have verified all information provided and I am ready to submit
+              the form.
             </label>
           </div>
 
@@ -232,6 +289,17 @@ export default function SignupForm() {
           >
             {loading ? "Submitting..." : "Submit"}
           </button>
+
+          {showSuccessModal && (
+            <SuccessModal
+              title="Registration Successful"
+              message="Your exam record has been created successfully. You may now proceed to the dashboard."
+              primaryLabel="Proceed to Dashboard"
+              secondaryLabel="Back to Login"
+              onPrimary={() => router.push("/dashboard")}
+              onSecondary={() => router.push("/login")}
+            />
+          )}
         </form>
       </div>
     </div>

@@ -6,15 +6,21 @@ import { auth } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { getGradeAndRemark } from "@/utils/getGradeAndRemark";
+import Letterhead from "@/components/UI/Letterhead/Letterhead";
+import LoadingOverlay from "@/components/UI/LoadingOverlay/LoadingOverlay";
+import NoDataError from "@/components/Error/NoDataError";
 
 import "./results.css";
 
-export default function ResultsPage() {
+export default function ResultsPage({ passedStudent = null, onClose = null }) {
   const router = useRouter();
-  const [student, setStudent] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [student, setStudent] = useState(passedStudent || null);
+  const [loading, setLoading] = useState(!passedStudent); // skip loading if prop was passed
 
   useEffect(() => {
+    // if student already passed from admin, skip fetching
+    if (passedStudent) return;
+
     const fetchStudentData = async () => {
       try {
         const user = auth.currentUser;
@@ -39,94 +45,106 @@ export default function ResultsPage() {
     };
 
     fetchStudentData();
-  }, [router]);
+  }, [router, passedStudent]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!student) return <p>No data found.</p>;
+  ResultsPage.defaultProps = {
+    passedStudent: null,
+  };
+
+  if (loading) return <LoadingOverlay />;
+
+  if (!student) {
+    return <NoDataError />;
+  }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      {/* Profile Card */}
-      <div className="flex items-center gap-4 mb-6 bg-white shadow-md p-4 rounded-lg">
-        <img
-          src={student.photoURL}
-          alt="Student"
-          className="student-photo"
-        />
-        <div>
-          <h2 className="text-xl font-bold">{student.fullName}</h2>
-          <p>{student.email}</p>
+    <div className="main-container">
+      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <div className="results-container">
+        <h3 className="results-title">STUDENT RESULTS</h3>
+        {/* Profile Card */}
+        <div className="profile-card">
+          <img src={student.photoURL} alt="Student" className="student-photo" />
+          <div>
+            <h2 className="student-name">{student.fullName}</h2>
+            <p className="student-email">{student.email}</p>
+          </div>
         </div>
-      </div>
 
-      {/* Details Grid */}
-      <div className="grid grid-cols-2 gap-4 mb-6 bg-gray-100 p-4 rounded-lg">
-        <div><strong>Class:</strong> {student.class}</div>
-        <div><strong>Department:</strong> {student.department}</div>
-        <div><strong>Exam ID:</strong> {student.examId}</div>
-      </div>
+        {/* Details Grid */}
+        <div className="details-grid">
+          <div>
+            <strong>Class:</strong> {student.class}
+          </div>
+          <div>
+            <strong>Department:</strong> {student.department}
+          </div>
+          <div>
+            <strong>Student ID:</strong> {student.studentId}
+          </div>
+        </div>
 
-      {/* Results Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="py-2 px-4 text-left">Subject</th>
-              <th className="py-2 px-4 text-left">Score</th>
-              <th className="py-2 px-4 text-left">Total</th>
-              <th className="py-2 px-4 text-left">Grade</th>
-              <th className="py-2 px-4 text-left">Remark</th>
-            </tr>
-          </thead>
-          <tbody>
-            {student.subjects.map((subject, index) => {
-              const { name, score, examTaken } = subject;
-
-              if (!examTaken) {
+        {/* Results Table */}
+        <div className="table-wrapper">
+          <table className="results-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th>Remark</th>
+              </tr>
+            </thead>
+            <tbody>
+              {student.subjects.map((subject, index) => {
+                const { name, score, examTaken } = subject;
+                if (!examTaken) {
+                  return (
+                    <tr key={index}>
+                      <td>{name}</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                    </tr>
+                  );
+                }
+                const { grade, remark } = getGradeAndRemark(score);
                 return (
-                  <tr key={index} className="border-b">
-                    <td className="py-2 px-4">{name}</td>
-                    <td className="py-2 px-4">Nil</td>
-                    <td className="py-2 px-4">Nil</td>
-                    <td className="py-2 px-4">Nil</td>
-                    <td className="py-2 px-4">Nil</td>
+                  <tr key={index}>
+                    <td>{name}</td>
+                    <td>{score}</td>
+                    <td>20</td>
+                    <td>{grade}</td>
+                    <td>{remark}</td>
                   </tr>
                 );
-              }
+              })}
+            </tbody>
+          </table>
+        </div>
 
-              const { grade, remark } = getGradeAndRemark(score);
+        {/* Footer Buttons */}
+        <div className="results-buttons">
+          {onClose ? (
+            <button onClick={onClose} className="btn back-btn">
+              Close
+            </button>
+          ) : (
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="btn back-btn"
+            >
+              Back to Dashboard
+            </button>
+          )}
 
-              return (
-                <tr key={index} className="border-b">
-                  <td className="py-2 px-4">{name}</td>
-                  <td className="py-2 px-4">{score}</td>
-                  <td className="py-2 px-4">20</td>
-                  <td className="py-2 px-4">{grade}</td>
-                  <td className="py-2 px-4">{remark}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Footer Buttons */}
-      <div className="mt-6 flex justify-between">
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
-        >
-          Back to Dashboard
-        </button>
-
-        <button
-          onClick={() => window.print()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Print
-        </button>
+          <button onClick={() => window.print()} className="btn print-btn">
+            Print
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-  

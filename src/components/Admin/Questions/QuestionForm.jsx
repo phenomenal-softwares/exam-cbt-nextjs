@@ -2,22 +2,11 @@
 import React, { useState } from "react";
 import { db } from "@/services/firebase";
 import { collection, addDoc } from "firebase/firestore";
-import "./QuestionForm.css"; // Optional: if you want to isolate styles
+import "./QuestionForm.css";
 
-const subjects = [
-  "Mathematics", "English Language", "Physics", "Chemistry", "Biology",
-  "Geography", "Agricultural Science", "Government", "Literature", "CRS",
-  "Civic Education", "History", "Accounting", "Commerce", "Economics",
-  "Marketing", "Office Practice",
-];
-
-const classOptions = ["SS1", "SS2", "SS3"];
-
-export default function QuestionForm() {
-  const [subject, setSubject] = useState("");
-  const [classLevel, setClassLevel] = useState("");
+export default function QuestionForm({ classLevel, subject, onSubmitComplete }) {
   const [submitting, setSubmitting] = useState(false);
-  const [questions, setQuestions] = useState([
+   const [bulkQuestions, setBulkQuestions] = useState([
     { question: "", options: ["", "", "", ""], answer: "" },
     { question: "", options: ["", "", "", ""], answer: "" },
     { question: "", options: ["", "", "", ""], answer: "" },
@@ -25,29 +14,34 @@ export default function QuestionForm() {
     { question: "", options: ["", "", "", ""], answer: "" },
   ]);
 
-  const handleQuestionChange = (index, key, value) => {
-    const updated = [...questions];
-    updated[index][key] = value;
-    setQuestions(updated);
-  };
+  const handleQuestionChange = (index, field, value) => {
+  const updatedQuestions = [...bulkQuestions];
+  updatedQuestions[index][field] = value;
+  setBulkQuestions(updatedQuestions);
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!classLevel || !subject) {
+      alert("Class and subject are required");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const colRef = collection(db, "Questions", classLevel, subject);
-      for (const q of questions) {
+      for (const q of bulkQuestions) {
         if (q.question.trim() && q.options.every(opt => opt.trim()) && q.answer.trim()) {
           await addDoc(colRef, q);
         }
       }
 
       alert("Questions submitted successfully!");
+      if (onSubmitComplete) onSubmitComplete();
 
-      // Reset everything
-      setSubmitting(false);
-      setQuestions([
+      setBulkQuestions([
         { question: "", options: ["", "", "", ""], answer: "" },
         { question: "", options: ["", "", "", ""], answer: "" },
         { question: "", options: ["", "", "", ""], answer: "" },
@@ -57,48 +51,18 @@ export default function QuestionForm() {
     } catch (err) {
       console.error("Error adding questions:", err);
       alert("Failed to submit questions.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="question-form">
       <h2>Add Questions</h2>
+      <p><strong>Class:</strong> {classLevel}</p>
+      <p><strong>Subject:</strong> {subject}</p>
 
-    <div className="class-subject-selection">
-      <label>
-        Class:
-        <select
-          value={classLevel}
-          onChange={(e) => setClassLevel(e.target.value)}
-          required
-        >
-          <option value="">Select Class</option>
-          {classOptions.map((cls) => (
-            <option key={cls} value={cls}>
-              {cls}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Subject:
-        <select
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          required
-        >
-          <option value="">Select Subject</option>
-          {subjects.map((sub) => (
-            <option key={sub} value={sub}>
-              {sub}
-            </option>
-          ))}
-        </select>
-      </label>
-      </div>
-
-      {questions.map((q, index) => (
+      {bulkQuestions.map((q, index) => (
         <div key={index} className="question-block">
           <h4>Question {index + 1}</h4>
           <label>

@@ -1,0 +1,92 @@
+.qm-wrapper {
+  padding: 2rem;
+  background-color: ivory;
+  min-height: 100vh;
+}
+
+.qm-title {
+  text-align: center;
+  color: blueviolet;
+  margin-top: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 2rem 0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.filter-group select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.primary-btn {
+  background-color: blueviolet;
+  color: ivory;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background-color: indigo;
+}
+
+.primary-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.danger-btn {
+  background-color: darkred;
+  color: ivory;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.danger-btn:hover {
+  background-color: crimson;
+}
+
+.danger-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background-color: #850f0f;
+  color: ivory;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.cancel-btn:hover {
+  background-color: #a00f0f;
+}
+
+.loading-text {
+  text-align: center;
+  color: gray;
+}
