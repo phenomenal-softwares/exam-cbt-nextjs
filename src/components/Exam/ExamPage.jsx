@@ -111,7 +111,7 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
 
   return (
     <div className="main-container">
-      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <Letterhead />
       <div className="exam-container">
         <div className="exam-header">
           <h3>{name}</h3>

@@ -18,6 +18,7 @@ export default function StudentManagement() {
   const [loading, setLoading] = useState(false);
   const [classFilter, setClassFilter] = useState("All");
   const [deptFilter, setDeptFilter] = useState("All");
+  const [genderFilter, setGenderFilter] = useState("Both");
   const [showResultModal, setShowResultModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -52,8 +53,18 @@ export default function StudentManagement() {
     if (deptFilter !== "All") {
       result = result.filter((s) => s.department === deptFilter);
     }
-    setFiltered(result);
-  }, [classFilter, deptFilter, students]);
+    if (genderFilter !== "Both") {
+      result = result.filter((s) => s.gender === genderFilter);
+    }
+
+    // Re-assign serial numbers for filtered list
+    const reNumbered = result.map((student, index) => ({
+      ...student,
+      sn: index + 1,
+    }));
+
+    setFiltered(reNumbered);
+  }, [classFilter, deptFilter, genderFilter, students]);
 
   const handleResetPassword = async () => {
     try {
@@ -108,6 +119,15 @@ export default function StudentManagement() {
           <option value="Art">Art</option>
           <option value="Commercial">Commercial</option>
           <option value="Science">Science</option>
+        </select>
+
+        <select
+          value={genderFilter}
+          onChange={(e) => setGenderFilter(e.target.value)}
+        >
+          <option value="Both">Both Genders</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
         </select>
       </div>
 
@@ -176,9 +196,7 @@ export default function StudentManagement() {
         <p className="loading-text">Fetching students...</p>
       ) : (
         filtered.length === 0 && (
-          <p className="no-data">
-            No students found for the selected filters.
-          </p>
+          <p className="no-data">No students found for the selected filters.</p>
         )
       )}
 

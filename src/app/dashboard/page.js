@@ -43,6 +43,7 @@ const DashboardPage = () => {
             fullName: data.fullName,
             email: data.email,
             className: data.class,
+            gender: data.gender,
             department: data.department,
             studentId: data.studentId,
             subjects: data.subjects || [],
@@ -118,7 +119,7 @@ const DashboardPage = () => {
 
   return (
     <main className="main-container">
-      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <Letterhead />
       <div className="dashboard-container">
         <h1>Student Dashboard</h1>
 
@@ -131,6 +132,7 @@ const DashboardPage = () => {
         <StudentDetailsGrid
           email={studentData.email}
           className={studentData.className}
+          gender={studentData.gender}
           department={studentData.department}
         />
 

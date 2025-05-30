@@ -1,0 +1,63 @@
+.signout-page {
+  height: 100vh;
+  background-color: ivory;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.signout-box {
+  background-color: white;
+  padding: 40px;
+  margin-top: 2rem;
+  border: 1px solid blueviolet;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.signout-box h2 {
+  font-size: 24px;
+  color: blueviolet;
+  margin-bottom: 10px;
+}
+
+.signout-box p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.signout-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.yes-btn,
+.no-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.yes-btn {
+  background-color: blueviolet;
+  color: white;
+}
+
+.yes-btn:hover {
+  background-color: #6a1bbf;
+}
+
+.no-btn {
+  background-color: #ddd;
+  color: #333;
+}
+
+.no-btn:hover {
+  background-color: #ccc;
+}

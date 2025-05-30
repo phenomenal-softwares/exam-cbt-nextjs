@@ -7,7 +7,9 @@ import "@/app/results/results.css"
 export default function AdminLayout({ children }) {
   return (
     <>
-      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <div className="admin-header">
+        ADMIN SUITE | DOLAPO HIGH SCHOOL INTEGRATED EXAM PORTAL
+      </div>
       <div className="admin-layout">
         <aside className="admin-sidebar">
           <Sidebar />

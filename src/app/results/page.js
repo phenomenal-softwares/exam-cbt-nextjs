@@ -59,7 +59,7 @@ export default function ResultsPage({ passedStudent = null, onClose = null }) {
 
   return (
     <div className="main-container">
-      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <Letterhead />
       <div className="results-container">
         <h3 className="results-title">STUDENT RESULTS</h3>
         {/* Profile Card */}

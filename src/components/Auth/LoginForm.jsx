@@ -43,7 +43,7 @@ export default function LoginForm() {
 
   return (
     <div className="authContainer">
-      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <Letterhead />
 
       <div className="formWrapper">
         <h2 className="title">Student Login</h2>

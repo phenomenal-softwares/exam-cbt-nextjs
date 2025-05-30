@@ -28,7 +28,7 @@ const SessionUpdateForm = () => {
     setSuccessMsg("");
 
     try {
-      const settingsRef = doc(db, "settings", "yourAutoID"); // Replace 'yourAutoID' with the actual ID
+      const settingsRef = doc(db, "settings", "general");
       const settingsDoc = await getDoc(settingsRef);
 
       if (!settingsDoc.exists()) {

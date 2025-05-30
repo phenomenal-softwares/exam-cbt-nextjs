@@ -70,7 +70,7 @@ export default function SignupForm() {
 
     try {
       const studentId = generateStudentId();
-      const subjects = generateSubjectList(formData.department);
+      const subjects = await generateSubjectList(formData.department);
 
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -132,7 +132,7 @@ export default function SignupForm() {
 
   return (
     <div className="authContainer">
-      <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+      <Letterhead />
       <div className="formWrapper">
         <h2 className="title">Student Registration</h2>
         <form onSubmit={handleSubmit} className="form">

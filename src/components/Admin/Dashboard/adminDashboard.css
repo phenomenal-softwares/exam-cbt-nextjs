@@ -5,6 +5,16 @@
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+.admin-header {
+  font-size: 1.2rem;
+  width: 100vw;
+  padding: 1.5rem;
+  font-weight: bold;
+  color: ivory;
+  text-align: center;
+  background-color: blueviolet;
+}
+
 .dashboard-overview {
   padding: 2rem;
   color: #333;
@@ -74,8 +84,9 @@
 
 .admin-main {
   flex: 1;
-  background: #f9f9ff;
+  background: ivory;
   width: 80%;
+  height: 100vh;
   overflow-y: auto;
 }
 

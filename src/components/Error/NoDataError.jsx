@@ -4,7 +4,7 @@ import "./NoDataError.css";
 
 const NoDataError = () => (
   <div className="main-container">
-    <Letterhead currentTerm={"3RD TERM"} currentSession={"2024/2025"} />
+    <Letterhead />
     <div className="error-container">
       <h2 className="error-title">No Student Data Found</h2>
       <p>

@@ -21,7 +21,7 @@ const SubjectsTable = ({ subjects, onTakeExam }) => {
                   disabled={subject.examTaken}
                   className={subject.examTaken ? 'btn-disabled' : 'btn-primary'}
                 >
-                  {subject.examTaken ? 'Exam Taken' : 'Take Exam'}
+                  {subject.examTaken ? 'Locked' : 'Take Exam'}
                 </button>
               </td>
             </tr>

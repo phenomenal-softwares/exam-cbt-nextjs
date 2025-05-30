@@ -1,3 +1,6 @@
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/services/firebase";
+
 const defaultSubjects = {
   Science: [
     'Mathematics',
@@ -28,16 +31,30 @@ const defaultSubjects = {
   ],
 };
 
-export function generateSubjectList(department) {
+// NEW: Async version to fetch maintenance mode status
+export async function generateSubjectList(department) {
   const normalizedDepartment =
-    department.charAt(0).toUpperCase() + department.slice(1).toLowerCase(); // Capitalize the first letter
+    department.charAt(0).toUpperCase() + department.slice(1).toLowerCase();
+
+  // Default assumption: exams are open
+  let isMaintenanceOn = false;
+
+  try {
+    const settingsRef = doc(db, "settings", "general");
+    const snap = await getDoc(settingsRef);
+    if (snap.exists()) {
+      isMaintenanceOn = !!snap.data().maintenanceMode;
+    }
+  } catch (error) {
+    console.warn("Could not fetch maintenance mode status:", error);
+    // Continue with examTaken = false to avoid blocking registration
+  }
 
   return (
     defaultSubjects[normalizedDepartment]?.map((name) => ({
       name,
-      examTaken: false,
-      score: 0, // Include default score
+      examTaken: isMaintenanceOn, // Set to true if maintenance is on
+      score: 0,
     })) || []
   );
 }
-
