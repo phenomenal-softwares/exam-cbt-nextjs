@@ -27,40 +27,53 @@ const DashboardPage = () => {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
   const router = useRouter();
 
   const auth = getAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const studentRef = doc(db, "students", user.uid);
-        const studentSnap = await getDoc(studentRef);
-        if (studentSnap.exists()) {
-          const data = studentSnap.data();
-          setStudentData({
-            photoURL: data.photoURL,
-            fullName: data.fullName,
-            email: data.email,
-            className: data.class,
-            gender: data.gender,
-            department: data.department,
-            studentId: data.studentId,
-            subjects: data.subjects || [],
-          });
-        } else {
-          console.warn("No student document found for UID:", user.uid);
-          setStudentData(null);
-        }
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const studentRef = doc(db, "students", user.uid);
+      const studentSnap = await getDoc(studentRef);
+      if (studentSnap.exists()) {
+        const data = studentSnap.data();
+        setStudentData({
+          photoURL: data.photoURL,
+          fullName: data.fullName,
+          email: data.email,
+          className: data.class,
+          gender: data.gender,
+          department: data.department,
+          studentId: data.studentId,
+          subjects: data.subjects || [],
+        });
       } else {
-        console.warn("User not logged in.");
+        console.warn("No student document found for UID:", user.uid);
         setStudentData(null);
       }
-      setLoading(false);
-    });
+    } else {
+      console.warn("User not logged in.");
+      setStudentData(null);
+    }
 
-    return () => unsubscribe(); // clean up
-  }, []);
+    // Fetch maintenance mode setting
+    try {
+      const settingsRef = doc(db, "settings", "general");
+      const settingsSnap = await getDoc(settingsRef);
+      if (settingsSnap.exists()) {
+        setMaintenanceMode(!!settingsSnap.data().maintenanceMode);
+      }
+    } catch (err) {
+      console.error("Failed to fetch maintenance mode:", err);
+    }
+
+    setLoading(false);
+  });
+
+  return () => unsubscribe(); // clean up
+}, []);
 
   const handleTakeExam = (subject) => {
     const encodedSubject = encodeURIComponent(subject.name);
@@ -94,7 +107,7 @@ const DashboardPage = () => {
 
 
   const handleChangePassword = () => {
-    console.log("Open change password modal or page");
+    router.push("/change-password")
   };
 
   const handleLogout = async () => {
@@ -139,6 +152,7 @@ const DashboardPage = () => {
         <SubjectsTable
           subjects={studentData.subjects}
           onTakeExam={handleTakeExam}
+          maintenanceMode={maintenanceMode}
         />
 
         {showMessageModal && (

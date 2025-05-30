@@ -1,11 +1,22 @@
 .admin-login-container {
   min-height: 100vh;
-  background: linear-gradient(to right, #1e1e2f, #2e2e3e);
+  background: blueviolet;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  padding: 2rem;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.school-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
 }
 
 .admin-login-form {

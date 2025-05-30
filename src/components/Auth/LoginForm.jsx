@@ -78,14 +78,14 @@ export default function LoginForm() {
         </form>
 
         <div className="links">
-          <a href="/recover" className="forgot-password">
+          <a href="/password-recovery" className="forgot-password">
             Forgot Password?
           </a>
           <a href="/signup" className="secondaryBtn">
             Not registered? Sign Up
           </a>
-          <a href="/adminLogin" className="outlineBtn">
-            Login as Admin
+          <a href="/parent" className="outlineBtn">
+            Parent Dashboard
           </a>
         </div>
       </div>

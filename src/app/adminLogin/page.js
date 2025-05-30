@@ -41,9 +41,16 @@ export default function AdminLoginPage() {
   return (
     <div className="admin-login-container">
       <form onSubmit={handleLogin} className="admin-login-form">
-        <h2>Admin Login</h2>
+        <div className="logo-container">
+          <img
+            src="/images/school-logo.png"
+            alt="School Logo"
+            className="school-logo"
+          />
+        </div>
+        <h2>Admin Suite</h2>
 
-        <label>Email</label>
+        <label>ADMIN E-MAIL</label>
         <input
           type="email"
           value="admin@dolapoexamportal.com"
@@ -51,7 +58,7 @@ export default function AdminLoginPage() {
           className="input"
         />
 
-        <label>Password</label>
+        <label>ADMIN PASS KEY</label>
         <input
           type={showPassword ? "text" : "password"}
           value={password}
@@ -71,10 +78,6 @@ export default function AdminLoginPage() {
         <button type="submit" className="login-btn">
           Login
         </button>
-
-        <p className="back-link">
-          Not an admin? <a href="/">Back to home page</a>
-        </p>
       </form>
     </div>
   );

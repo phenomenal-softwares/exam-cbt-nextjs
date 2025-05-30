@@ -10,16 +10,19 @@ export default function Sidebar() {
   const [messageCount, setMessageCount] = useState(0);
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchMessageCounts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'messages'));
-        setMessageCount(querySnapshot.size);
+        const studentSnapshot = await getDocs(collection(db, 'messages'));
+        const parentSnapshot = await getDocs(collection(db, 'parentMessages'));
+
+        const totalMessages = studentSnapshot.size + parentSnapshot.size;
+        setMessageCount(totalMessages);
       } catch (error) {
         console.error('Failed to fetch message count:', error);
       }
     };
 
-    fetchMessages();
+    fetchMessageCounts();
   }, []);
 
   const navItems = [

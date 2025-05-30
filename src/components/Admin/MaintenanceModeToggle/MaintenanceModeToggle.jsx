@@ -1,14 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { 
-  collection, 
-  getDocs, 
-  getDoc, 
-  updateDoc, 
-  doc, 
-  writeBatch 
-} from "firebase/firestore";
+import { getDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import "./SettingsForm.css";
 
@@ -34,57 +27,40 @@ const MaintenanceModeToggle = () => {
   }, []);
 
   const handleToggle = async () => {
-  const confirmMsg = isEnabled
-    ? "Disable Maintenance Mode and allow exams again?"
-    : "Enable Maintenance Mode? This will mark ALL students' exams as taken.";
-  const proceed = confirm(confirmMsg);
+    const confirmMsg = isEnabled
+      ? "Disable Maintenance Mode and allow exams again?"
+      : "Enable Maintenance Mode? This will temporarily block access to exams.";
+    const proceed = confirm(confirmMsg);
 
-  if (!proceed) return;
+    if (!proceed) return;
 
-  setLoading(true);
-  setMessage("");
+    setLoading(true);
+    setMessage("");
 
-  try {
-    const settingsRef = doc(db, "settings", "general");
-    await updateDoc(settingsRef, { maintenanceMode: !isEnabled });
+    try {
+      const settingsRef = doc(db, "settings", "general");
+      await updateDoc(settingsRef, { maintenanceMode: !isEnabled });
 
-    const studentsSnap = await getDocs(collection(db, "students"));
-    const batch = writeBatch(db);
+      setMessage(
+        !isEnabled
+          ? "Maintenance mode activated. Students are now blocked from taking exams."
+          : "Maintenance mode disabled. Exams are now accessible to students."
+      );
 
-    studentsSnap.forEach((docSnap) => {
-      const studentRef = doc(db, "students", docSnap.id);
-      const subjects = docSnap.data().subjects || [];
-
-      const updatedSubjects = subjects.map((subj) => ({
-        ...subj,
-        examTaken: !isEnabled // true when enabling, false when disabling
-      }));
-
-      batch.update(studentRef, { subjects: updatedSubjects });
-    });
-
-    await batch.commit();
-
-    setMessage(
-      !isEnabled
-        ? "Maintenance mode activated. All students blocked from exams."
-        : "Maintenance mode disabled. Students can now take exams."
-    );
-
-    setIsEnabled(!isEnabled);
-  } catch (err) {
-    console.error("Maintenance mode error:", err);
-    setMessage("Error updating maintenance mode.");
-  } finally {
-    setLoading(false);
-  }
-};
+      setIsEnabled(!isEnabled);
+    } catch (err) {
+      console.error("Maintenance mode error:", err);
+      setMessage("Error updating maintenance mode.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="settings-form-box">
       <h3>Maintenance Mode {isEnabled ? '(On)' : '(Off)'}</h3>
       <p className="warning-text">
-        ⚠️ When activated, students will be blocked from taking exams. All exam statuses will be locked.
+        ⚠️ When activated, students will be blocked from taking exams. Their status won't be updated, but the button will be disabled.
       </p>
       <button className="update-btn" onClick={handleToggle} disabled={loading}>
         {loading
@@ -93,7 +69,11 @@ const MaintenanceModeToggle = () => {
           ? "Disable Maintenance Mode"
           : "Enable Maintenance Mode"}
       </button>
-      {message && <p className={message.includes("Error") ? "error-text" : "success-text"}>{message}</p>}
+      {message && (
+        <p className={message.includes("Error") ? "error-text" : "success-text"}>
+          {message}
+        </p>
+      )}
     </div>
   );
 };

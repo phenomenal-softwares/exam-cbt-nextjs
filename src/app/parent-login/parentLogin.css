@@ -1,0 +1,66 @@
+
+.main-container {
+  background: ivory;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+min-height: 100vh;
+}
+
+.parent-login-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: ivory;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+  text-align: center;
+}
+
+.login-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: blueviolet;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-input {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.login-input:focus {
+  border-color: blueviolet;
+  box-shadow: 0 0 4px rgba(138, 43, 226, 0.4);
+}
+
+.login-button {
+  background-color: blueviolet;
+  color: ivory;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: indigo;
+}
+
+.login-error {
+  color: #b00020;
+  font-size: 14px;
+  margin-top: 10px;
+}

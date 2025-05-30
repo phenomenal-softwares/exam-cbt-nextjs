@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/services/firebase';
-import Spinner from '../Spinner/Spinner';
 import './Letterhead.css';
 
 const Letterhead = () => {
@@ -50,7 +49,7 @@ const Letterhead = () => {
           P.M.B 2317, ASA DAM, ILORIN, KWARA STATE
         </p>
         <div className="exam-details">
-          {loading ? <Spinner /> : `${term} ${session} INTEGRATED EXAM E-FACILITY`}
+          {loading ? 'WELCOME...' : `${term} ${session} INTEGRATED EXAM E-FACILITY`}
         </div>
       </div>
     </div>
