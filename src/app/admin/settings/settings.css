@@ -1,12 +1,11 @@
 .settings-page {
   padding: 2rem;
-  max-width: 900px;
   margin: auto;
 }
 
-.settings-header {
-  font-size: 24px;
-  font-weight: bold;
-  color: blueviolet;
-  margin-bottom: 2rem;
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
+

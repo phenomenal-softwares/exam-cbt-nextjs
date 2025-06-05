@@ -10,7 +10,8 @@
   gap: 20px;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logo-container img {
@@ -32,7 +33,55 @@
 }
 
 .school-address,
-.exam-portal {
+.exam-details {
   font-size: 14px;
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .letterhead {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  .school-name {
+    font-size: 22px;
+  }
+
+  .school-address,
+  .exam-details {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .letterhead-text {
+    gap: 5px;
+  }
+
+  .logo-container img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .letterhead {
+    padding: 10px 15px;
+  }
+
+  .school-name {
+    font-size: 18px;
+  }
+
+  .school-address,
+  .exam-details {
+    font-size: 12px;
+  }
+
+  .logo-container img {
+    width: 50px;
+    height: 50px;
+  }
 }

@@ -9,6 +9,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Viewport meta tag to control mobile behavior */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
       <body>
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <main style={{ flex: 1 }}>

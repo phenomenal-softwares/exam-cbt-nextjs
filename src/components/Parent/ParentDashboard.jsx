@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { db } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import WardsTable from "./WardsTable";
 import ResultsPage from "@/app/results/page";
 import MessageModal from "../UI/Modal/MessageModal";
@@ -11,7 +13,6 @@ import "./ParentDashboard.css";
 
 export default function ParentDashboard({ parentId }) {
   const [parentData, setParentData] = useState(null);
-  const [showResultModal, setShowResultModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
@@ -30,9 +31,32 @@ export default function ParentDashboard({ parentId }) {
     fetchParent();
   }, [parentId]);
 
-  const handleViewResults = (student) => {
+  const handleDownloadResult = async (student) => {
     setSelectedStudent(student);
-    setShowResultModal(true);
+
+    setTimeout(async () => {
+      const input = document.getElementById("pdf-container");
+      if (!input) return;
+
+      const canvas = await html2canvas(input, {
+        scale: 2,
+        useCORS: true,
+        scrollY: -window.scrollY,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      // If pdfHeight is longer than A4, cap it
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const finalHeight = Math.min(pdfHeight, pageHeight);
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, finalHeight);
+      pdf.save(`${student.fullName}_Result.pdf`);
+    }, 500);
   };
 
   const handleConfirmMessage = async (messageText) => {
@@ -66,13 +90,16 @@ export default function ParentDashboard({ parentId }) {
 
   return (
     <div className="dashboard">
-      <h2 className="title">PARENT DASHBOARD</h2>
-      <h2>Welcome, {parentData.fullName}</h2>
+      <h3 className="title">PARENT DASHBOARD</h3>
+      <h3>Welcome, {parentData.fullName}</h3>
       <p>Email: {parentData.email}</p>
       <p>Phone: {parentData.phone}</p>
+
       <WardsTable
-        wardIds={parentData.wards}
-        onViewResults={handleViewResults}
+        wards={parentData.wards || []}
+        selectedStudent={selectedStudent}
+        setSelectedStudent={setSelectedStudent}
+        onDownloadResult={handleDownloadResult}
       />
 
       {messageStatus && <p className="message-status">{messageStatus}</p>}
@@ -91,16 +118,17 @@ export default function ParentDashboard({ parentId }) {
         </button>
       </div>
 
-      {showResultModal && selectedStudent && (
-        <div className="custom-modal-overlay">
-          <div className="custom-modal-content">
+      <div style={{ position: "absolute", top: "-9999px", left: "-9999px" }}>
+        <div id="pdf-container">
+          {selectedStudent && (
             <ResultsPage
               passedStudent={selectedStudent}
-              onClose={() => setShowResultModal(false)}
+              onClose={() => {}}
+              isExport={true} // optional prop if needed to hide buttons
             />
-          </div>
+          )}
         </div>
-      )}
+      </div>
 
       {showMessageModal && (
         <MessageModal

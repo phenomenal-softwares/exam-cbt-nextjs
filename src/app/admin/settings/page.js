@@ -11,19 +11,13 @@ import "./settings.css";
 const AdminSettingsPage = () => {
   return (
     <div className="settings-page">
-      <h2 className="settings-header">Account Settings</h2>
-
-      {/* Section for Academic Session */}
-      <SessionUpdateForm />
-
-      {/* Section for Academic Term */}
-      <TermUpdateForm />
-
-      {/* Section for Change Passkey */}
-      <ChangePasskeyForm />
-
-      {/* Section for Maintenance Mode */}
-      <MaintenanceModeToggle />
+      <h1 className="page-title">Account Settings</h1>
+      <div className="settings-grid">
+        <SessionUpdateForm />
+        <TermUpdateForm />
+        <ChangePasskeyForm />
+        <MaintenanceModeToggle />
+      </div>
     </div>
   );
 };

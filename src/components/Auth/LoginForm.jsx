@@ -85,7 +85,7 @@ export default function LoginForm() {
             Not registered? Sign Up
           </a>
           <a href="/parent" className="outlineBtn">
-            Parent Dashboard
+            Parent
           </a>
         </div>
       </div>

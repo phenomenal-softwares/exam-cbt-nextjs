@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from "react";
 import { db } from "@/services/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
 import "./QuestionForm.css";
 
 export default function QuestionForm({ classLevel, subject, onSubmitComplete }) {
@@ -22,39 +22,54 @@ export default function QuestionForm({ classLevel, subject, onSubmitComplete }) 
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!classLevel || !subject) {
-      alert("Class and subject are required");
-      return;
+  e.preventDefault();
+  if (!classLevel || !subject) {
+    alert("Class and subject are required");
+    return;
+  }
+
+  setSubmitting(true);
+
+  try {
+    const colRef = collection(db, "Questions", classLevel, subject);
+
+    // ✅ Check or create config
+    const configRef = doc(db, "Questions", classLevel, subject, "config");
+    const configSnap = await getDoc(configRef);
+
+    if (!configSnap.exists()) {
+      await setDoc(configRef, {
+        totalQuestions: 20,
+        timeLimit: 15,
+      });
+      console.log("Default config created");
     }
 
-    setSubmitting(true);
-
-    try {
-      const colRef = collection(db, "Questions", classLevel, subject);
-      for (const q of bulkQuestions) {
-        if (q.question.trim() && q.options.every(opt => opt.trim()) && q.answer.trim()) {
-          await addDoc(colRef, q);
-        }
+    // ✅ Add questions
+    for (const q of bulkQuestions) {
+      if (q.question.trim() && q.options.every(opt => opt.trim()) && q.answer.trim()) {
+        await addDoc(colRef, q);
       }
-
-      alert("Questions submitted successfully!");
-      if (onSubmitComplete) onSubmitComplete();
-
-      setBulkQuestions([
-        { question: "", options: ["", "", "", ""], answer: "" },
-        { question: "", options: ["", "", "", ""], answer: "" },
-        { question: "", options: ["", "", "", ""], answer: "" },
-        { question: "", options: ["", "", "", ""], answer: "" },
-        { question: "", options: ["", "", "", ""], answer: "" },
-      ]);
-    } catch (err) {
-      console.error("Error adding questions:", err);
-      alert("Failed to submit questions.");
-    } finally {
-      setSubmitting(false);
     }
-  };
+
+    alert("Questions submitted successfully!");
+    if (onSubmitComplete) onSubmitComplete();
+
+    // Reset form
+    setBulkQuestions([
+      { question: "", options: ["", "", "", ""], answer: "" },
+      { question: "", options: ["", "", "", ""], answer: "" },
+      { question: "", options: ["", "", "", ""], answer: "" },
+      { question: "", options: ["", "", "", ""], answer: "" },
+      { question: "", options: ["", "", "", ""], answer: "" },
+    ]);
+  } catch (err) {
+    console.error("Error adding questions:", err);
+    alert("Failed to submit questions.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <form onSubmit={handleSubmit} className="question-form">

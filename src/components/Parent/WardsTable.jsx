@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react";
-import { db } from "@/services/firebase"; // Firebase config
+import { db } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import "./ParentDashboard.css";
 
-import './ParentDashboard.css'
-
-export default function WardsTable({ wardIds, onViewResults }) {
+export default function WardsTable({
+  wards, // this is the array of ward UIDs
+  selectedStudent,
+  setSelectedStudent,
+  onDownloadResult, // 🔥 pass this in from parent
+}) {
   const [wardsData, setWardsData] = useState([]);
 
   useEffect(() => {
     const fetchWards = async () => {
-      const wards = [];
-      for (const wardId of wardIds) {
+      const fetchedWards = [];
+      for (const wardId of wards) {
         const docRef = doc(db, "students", wardId);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          wards.push({ id: wardId, ...docSnap.data() });
+          fetchedWards.push({ id: wardId, ...docSnap.data() });
         }
       }
-      setWardsData(wards);
+      setWardsData(fetchedWards);
     };
 
-    if (wardIds.length > 0) {
+    if (wards.length > 0) {
       fetchWards();
     }
-  }, [wardIds]);
+  }, [wards]);
 
-  if (wardsData.length === 0) return <p>No wards found.</p>;
+  if (wardsData.length === 0) return <p>Fetching wards...</p>;
 
   return (
     <div className="wards-table-container">
@@ -51,9 +55,9 @@ export default function WardsTable({ wardIds, onViewResults }) {
               <td>
                 <button
                   className="view-results-btn"
-                  onClick={() => onViewResults(ward)}
+                  onClick={() => onDownloadResult(ward)} // ✅ this now works
                 >
-                  View Results
+                  Download Result
                 </button>
               </td>
             </tr>

@@ -9,61 +9,79 @@ import "./adminDashboard.css";
 export default function DashboardOverview() {
   const [totalStudents, setTotalStudents] = useState(0);
   const [examsTaken, setExamsTaken] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [uploadedExams, setUploadedExams] = useState({
+    SS1: 0,
+    SS2: 0,
+    SS3: 0,
+  });
+  const [totalParents, setTotalParents] = useState(0);
+  const [totalMessages, setTotalMessages] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const [loadingStudents, setLoadingStudents] = useState(true);
-  const [loadingExams, setLoadingExams] = useState(true);
-  const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const subjectList = [
+    "Biology",
+    "Chemistry",
+    "Physics",
+    "Mathematics",
+    "English Language",
+    "Geography",
+    "Agricultural Science",
+    "Government",
+    "Literature",
+    "CRS",
+    "Civic Education",
+    "History",
+    "Accounting",
+    "Commerce",
+    "Economics",
+    "Marketing",
+    "Office Practice",
+  ];
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        // Fetch students
         const studentSnapshot = await getDocs(collection(db, "students"));
         const allStudents = studentSnapshot.docs;
         setTotalStudents(allStudents.length);
-        setLoadingStudents(false);
 
-        const takenExams = allStudents.filter((doc) => {
-          const data = doc.data();
-          return data.subjects?.some((sub) => sub.examTaken === true);
-        });
+        // Exams taken
+        const takenExams = allStudents.filter((doc) =>
+          doc.data().subjects?.some((sub) => sub.examTaken === true)
+        );
         setExamsTaken(takenExams.length);
-        setLoadingExams(false);
 
+        // Exams uploaded per class
         const classes = ["SS1", "SS2", "SS3"];
-        const subjects = [
-          "Biology",
-          "Chemistry",
-          "Physics",
-          "Mathematics",
-          "English Language",
-          "Geography",
-          "Agricultural Science",
-          "Government",
-          "Literature",
-          "CRS",
-          "Civic Education",
-          "History",
-          "Accounting",
-          "Commerce",
-          "Economics",
-          "Marketing",
-          "Office Practice"
-        ];
+        const uploaded = {};
 
-        let total = 0;
         for (const classLevel of classes) {
-          for (const subject of subjects) {
+          let count = 0;
+          for (const subject of subjectList) {
             const qSnap = await getDocs(
               collection(db, `Questions/${classLevel}/${subject}`)
             );
-            total += qSnap.size;
+            if (!qSnap.empty) count += 1;
           }
+          uploaded[classLevel] = count;
         }
-        setTotalQuestions(total);
-        setLoadingQuestions(false);
-      } catch (error) {
-        console.error("Error fetching stats:", error);
+        setUploadedExams(uploaded);
+
+        // Parents
+        const parentSnap = await getDocs(collection(db, "parents"));
+        setTotalParents(parentSnap.size);
+
+        // Messages + Parent Messages
+        const [msgSnap, parentMsgSnap] = await Promise.all([
+          getDocs(collection(db, "messages")),
+          getDocs(collection(db, "parentMessages")),
+        ]);
+        setTotalMessages(msgSnap.size + parentMsgSnap.size);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -72,19 +90,41 @@ export default function DashboardOverview() {
 
   return (
     <div className="dashboard-overview">
-      <h2>Admin Dashboard</h2>
+      <h1 className="page-title">Overview</h1>
       <div className="overview-grid">
         <StatCard
           label="Total Students"
-          count={loadingStudents ? <Spinner /> : totalStudents}
+          count={loading ? <Spinner /> : totalStudents}
         />
         <StatCard
-          label="Exams Taken"
-          count={loadingExams ? <Spinner /> : examsTaken}
+          label="Exams Submitted"
+          count={loading ? <Spinner /> : examsTaken}
         />
         <StatCard
-          label="Total Questions"
-          count={loadingQuestions ? <Spinner /> : totalQuestions}
+          label="Exams Uploaded (SS1)"
+          count={
+            loading ? <Spinner /> : `${uploadedExams.SS1}/${subjectList.length}`
+          }
+        />
+        <StatCard
+          label="Exams Uploaded (SS2)"
+          count={
+            loading ? <Spinner /> : `${uploadedExams.SS2}/${subjectList.length}`
+          }
+        />
+        <StatCard
+          label="Exams Uploaded (SS3)"
+          count={
+            loading ? <Spinner /> : `${uploadedExams.SS3}/${subjectList.length}`
+          }
+        />
+        <StatCard
+          label="Total Parents"
+          count={loading ? <Spinner /> : totalParents}
+        />
+        <StatCard
+          label="Total Messages"
+          count={loading ? <Spinner /> : totalMessages}
         />
       </div>
     </div>

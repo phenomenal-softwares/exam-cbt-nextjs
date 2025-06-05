@@ -98,7 +98,7 @@ export default function StudentManagement() {
 
   return (
     <div className="student-management">
-      <h2>Student Management</h2>
+      <h1 className="page-title">Student Management</h1>
 
       <div className="filters">
         <select

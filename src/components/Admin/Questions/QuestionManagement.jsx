@@ -7,8 +7,10 @@ import {
   collection,
   doc,
   deleteDoc,
+  setDoc,
   query,
   where,
+  getDoc,
   getDocs,
 } from "firebase/firestore";
 
@@ -50,7 +52,40 @@ const QuestionManagement = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedQuestionId, setSelectedQuestionId] = useState(null);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [config, setConfig] = useState({ totalQuestions: 20, timeLimit: 15 });
+  const [totalQuestions, setTotalQuestions] = useState(20);
+  const [timeLimit, setTimeLimit] = useState(15);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      if (!selectedClass || !selectedSubject) return;
+
+      try {
+        const configRef = doc(
+          db,
+          "Questions",
+          selectedClass,
+          selectedSubject,
+          "config"
+        );
+        const configSnap = await getDoc(configRef);
+
+        if (configSnap.exists()) {
+          setConfig({
+            totalQuestions: configSnap.data().totalQuestions || 20,
+            timeLimit: configSnap.data().timeLimit || 15,
+          });
+        } else {
+          setConfig({ totalQuestions: 20, timeLimit: 15 });
+        }
+      } catch (err) {
+        console.error("Failed to fetch config:", err);
+        setConfig({ totalQuestions: 20, timeLimit: 15 });
+      }
+    };
+
+    fetchConfig();
+  }, [selectedClass, selectedSubject]);
 
   const fetchQuestions = async () => {
     if (!selectedClass || !selectedSubject) return;
@@ -64,10 +99,12 @@ const QuestionManagement = () => {
         selectedSubject
       );
       const querySnapshot = await getDocs(questionsRef);
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data = querySnapshot.docs
+        .filter((doc) => doc.id !== "config") // filter out config
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
       setQuestions(data);
     } catch (error) {
       console.error("Error fetching questions:", error);
@@ -80,6 +117,43 @@ const QuestionManagement = () => {
   useEffect(() => {
     fetchQuestions();
   }, [selectedClass, selectedSubject]);
+
+  const handleConfigUpdate = async () => {
+    if (!selectedClass || !selectedSubject) {
+      alert("Please select both class and subject.");
+      return;
+    }
+
+    if (
+      totalQuestions < 10 ||
+      totalQuestions > 60 ||
+      timeLimit < 5 ||
+      timeLimit > 60
+    ) {
+      alert(
+        "Invalid input: Questions must be between 10-60, time between 5-60 mins."
+      );
+      return;
+    }
+
+    try {
+      const configRef = doc(
+        db,
+        "Questions",
+        selectedClass,
+        selectedSubject,
+        "config"
+      );
+      await setDoc(configRef, {
+        totalQuestions,
+        timeLimit,
+      });
+      alert("Config updated successfully.");
+    } catch (error) {
+      console.error("Error updating config:", error);
+      alert("Failed to update config.");
+    }
+  };
 
   const handleDeleteClick = (id) => {
     setSelectedQuestionId(id);
@@ -148,7 +222,7 @@ const QuestionManagement = () => {
 
   return (
     <div className="qm-wrapper">
-      <h1 className="qm-title">Question Management</h1>
+      <h1 className="page-title">Question Management</h1>
 
       <div className="filters">
         <div className="filter-group">
@@ -202,6 +276,65 @@ const QuestionManagement = () => {
         </div>
       </div>
 
+      <div className="config-section">
+          <div className="config-input-group">
+            <label>
+              Total Questions Per Exam:
+              <input
+                type="number"
+                min="10"
+                max="60"
+                value={totalQuestions}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setTotalQuestions(val === "" ? "" : Number(val));
+                }}
+                placeholder="Enter 10 - 60"
+              />
+            </label>
+
+            <label>
+              Time Limit (minutes):
+              <input
+                type="number"
+                min="5"
+                max="60"
+                value={timeLimit}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setTimeLimit(val === "" ? "" : Number(val));
+                }}
+                placeholder="Enter 5 - 60"
+              />
+            </label>
+
+            <button
+              onClick={handleConfigUpdate}
+              disabled={
+                !selectedClass ||
+                !selectedSubject ||
+                typeof totalQuestions !== "number" ||
+                typeof timeLimit !== "number" ||
+                totalQuestions < 10 ||
+                totalQuestions > 60 ||
+                timeLimit < 5 ||
+                timeLimit > 60
+              }
+            >
+              Save Config
+            </button>
+          </div>
+        </div>
+
+      <div className="exam-config-row">
+        <div>
+          <strong>Total Questions Per Exam:</strong> {config.totalQuestions}
+        </div>
+        <div>
+          <strong>Time Limit Per Exam:</strong> {config.timeLimit} mins
+        </div>
+      </div>
+
       {loading ? (
         <p className="loading-text">Fetching questions...</p>
       ) : (
@@ -216,17 +349,20 @@ const QuestionManagement = () => {
       {showAddQuestionModal && (
         <div className="custom-modal-overlay">
           <div className="custom-modal-content">
-            <button onClick={() => setShowAddQuestionModal(false)} className="cancel-btn">
-            Cancel
-          </button>
-          <QuestionForm
-            classLevel={selectedClass}
-            subject={selectedSubject}
-            onSubmitComplete={() => {
-              fetchQuestions();
-              setShowAddQuestionModal(false);
-            }}
-          />
+            <button
+              onClick={() => setShowAddQuestionModal(false)}
+              className="cancel-btn"
+            >
+              Cancel
+            </button>
+            <QuestionForm
+              classLevel={selectedClass}
+              subject={selectedSubject}
+              onSubmitComplete={() => {
+                fetchQuestions();
+                setShowAddQuestionModal(false);
+              }}
+            />
           </div>
         </div>
       )}

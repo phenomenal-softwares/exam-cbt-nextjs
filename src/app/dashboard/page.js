@@ -33,47 +33,47 @@ const DashboardPage = () => {
   const auth = getAuth();
 
   useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const studentRef = doc(db, "students", user.uid);
-      const studentSnap = await getDoc(studentRef);
-      if (studentSnap.exists()) {
-        const data = studentSnap.data();
-        setStudentData({
-          photoURL: data.photoURL,
-          fullName: data.fullName,
-          email: data.email,
-          className: data.class,
-          gender: data.gender,
-          department: data.department,
-          studentId: data.studentId,
-          subjects: data.subjects || [],
-        });
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const studentRef = doc(db, "students", user.uid);
+        const studentSnap = await getDoc(studentRef);
+        if (studentSnap.exists()) {
+          const data = studentSnap.data();
+          setStudentData({
+            photoURL: data.photoURL,
+            fullName: data.fullName,
+            email: data.email,
+            className: data.class,
+            gender: data.gender,
+            department: data.department,
+            studentId: data.studentId,
+            subjects: data.subjects || [],
+          });
+        } else {
+          console.warn("No student document found for UID:", user.uid);
+          setStudentData(null);
+        }
       } else {
-        console.warn("No student document found for UID:", user.uid);
+        console.warn("User not logged in.");
         setStudentData(null);
       }
-    } else {
-      console.warn("User not logged in.");
-      setStudentData(null);
-    }
 
-    // Fetch maintenance mode setting
-    try {
-      const settingsRef = doc(db, "settings", "general");
-      const settingsSnap = await getDoc(settingsRef);
-      if (settingsSnap.exists()) {
-        setMaintenanceMode(!!settingsSnap.data().maintenanceMode);
+      // Fetch maintenance mode setting
+      try {
+        const settingsRef = doc(db, "settings", "general");
+        const settingsSnap = await getDoc(settingsRef);
+        if (settingsSnap.exists()) {
+          setMaintenanceMode(!!settingsSnap.data().maintenanceMode);
+        }
+      } catch (err) {
+        console.error("Failed to fetch maintenance mode:", err);
       }
-    } catch (err) {
-      console.error("Failed to fetch maintenance mode:", err);
-    }
 
-    setLoading(false);
-  });
+      setLoading(false);
+    });
 
-  return () => unsubscribe(); // clean up
-}, []);
+    return () => unsubscribe(); // clean up
+  }, []);
 
   const handleTakeExam = (subject) => {
     const encodedSubject = encodeURIComponent(subject.name);
@@ -91,23 +91,22 @@ const DashboardPage = () => {
   };
 
   const handleSendMessage = async (message) => {
-  if (!studentData) return;
+    if (!studentData) return;
 
-  const messageData = {
-    name: studentData.fullName,
-    class: studentData.className,
-    department: studentData.department,
-    message,
+    const messageData = {
+      name: studentData.fullName,
+      class: studentData.className,
+      department: studentData.department,
+      message,
+    };
+
+    await saveMessageToDatabase(messageData);
+    setShowMessageModal(false);
+    setSuccessModal(true);
   };
 
-  await saveMessageToDatabase(messageData);
-  setShowMessageModal(false);
-  setSuccessModal(true);
-};
-
-
   const handleChangePassword = () => {
-    router.push("/change-password")
+    router.push("/change-password");
   };
 
   const handleLogout = async () => {
@@ -125,9 +124,10 @@ const DashboardPage = () => {
   }
 
   if (!studentData) {
-    return (
-      <NoDataError />
-    );
+    setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+    return <NoDataError />;
   }
 
   return (

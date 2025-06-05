@@ -26,7 +26,7 @@ const MessageModal = ({
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        <h2>{title}</h2>
+        <h3 className="title">{title}</h3>
         <textarea
           className="message-textarea"
           value={message}

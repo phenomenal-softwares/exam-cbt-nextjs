@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { db } from "@/services/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 import { getGradeAndRemark } from "@/utils/getGradeAndRemark";
 
@@ -35,12 +35,25 @@ export default function ExamResults() {
   const [loading, setLoading] = useState(false);
   const [allTaken, setAllTaken] = useState(true); // Track if all students have taken the exam
   const [sortedByScore, setSortedByScore] = useState(false); // Track if sorting by score is active
+  const [total, setTotal] = useState(20);
 
   const handleFetchResults = async () => {
     if (!selectedClass || !selectedSubject) return;
     setLoading(true);
 
     try {
+      // Step 1: Fetch totalQuestions from config
+      const configRef = doc(
+        db,
+        `Questions/${selectedClass}/${selectedSubject}/config`
+      );
+      const configSnap = await getDoc(configRef);
+      const totalQuestions =
+        configSnap.exists() && configSnap.data()?.totalQuestions
+          ? configSnap.data().totalQuestions
+          : 20;
+
+      // Step 2: Fetch students and filter
       const querySnapshot = await getDocs(collection(db, "students"));
       const filtered = [];
 
@@ -61,26 +74,35 @@ export default function ExamResults() {
         }
       });
 
-      // Check if all students have taken the exam
       const allHaveTakenExam = filtered.every(
         (student) => student.score !== "Nil"
       );
       setAllTaken(allHaveTakenExam);
 
-      // Default sorting by name
+      // Save results and totalQuestions
       const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name));
       setStudents(sorted);
+      setTotal(totalQuestions); // <- Add this state next
     } catch (err) {
-      console.error("Error fetching students:", err);
+      console.error("Error fetching results or config:", err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleSortByScore = () => {
-    const sorted = [...students].sort((a, b) => b.score - a.score);
-    setStudents(sorted);
-    setSortedByScore(true);
+    if (!allTaken) return;
+
+    if (sortedByScore) {
+      // Sort back to name order
+      const sorted = [...students].sort((a, b) => a.name.localeCompare(b.name));
+      setStudents(sorted);
+      setSortedByScore(false);
+    } else {
+      const sorted = [...students].sort((a, b) => b.score - a.score);
+      setStudents(sorted);
+      setSortedByScore(true);
+    }
   };
 
   useEffect(() => {
@@ -89,7 +111,7 @@ export default function ExamResults() {
 
   return (
     <div className="exam-results-container">
-      <h2>Exam Results</h2>
+      <h1 className="page-title">Exam Results</h1>
 
       <div className="filters">
         <select
@@ -136,13 +158,8 @@ export default function ExamResults() {
             onClick={handleSortByScore}
             className="sort-button"
             disabled={!allTaken}
-            title={
-              !allTaken
-                ? "All students must have taken the exam to sort by score"
-                : ""
-            }
           >
-            Sort by Score
+            {sortedByScore ? "Sort by Name" : "Sort by Score"}
           </button>
 
           <table className="results-table">
@@ -152,6 +169,7 @@ export default function ExamResults() {
                 <th>STUDENT</th>
                 <th>SCORE</th>
                 <th>TOTAL</th>
+                <th>PERCENTAGE</th>
                 <th>GRADE</th>
                 <th>REMARK</th>
               </tr>
@@ -160,7 +178,7 @@ export default function ExamResults() {
               {students.map((s, index) => {
                 const { grade, remark } =
                   s.score !== "Nil"
-                    ? getGradeAndRemark(s.score)
+                    ? getGradeAndRemark(s.score, total)
                     : { grade: "Nil", remark: "Nil" };
 
                 return (
@@ -168,7 +186,12 @@ export default function ExamResults() {
                     <td>{index + 1}</td>
                     <td>{s.name}</td>
                     <td>{s.score}</td>
-                    <td>20</td>
+                    <td>{total}</td>
+                    <td>
+                      {s.score !== "Nil"
+                        ? `${((s.score / total) * 100).toFixed(1)}%`
+                        : "Nil"}
+                    </td>
                     <td>{grade}</td>
                     <td>{remark}</td>
                   </tr>

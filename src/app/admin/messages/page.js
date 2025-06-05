@@ -94,7 +94,7 @@ export default function MessagesPage() {
 
   return (
     <div className="messages-page">
-      <h2>Inbox Messages</h2>
+      <h1 className="page-title">Inbox Messages</h1>
       {loading ? (
         <p>Loading messages...</p>
       ) : messages.length === 0 ? (

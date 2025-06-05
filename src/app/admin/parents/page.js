@@ -79,7 +79,7 @@ export default function ParentsPage() {
   return (
     <div className="parents-page">
       <div className="top-bar">
-        <h2>Parents</h2>
+        <h1 className="page-title">Parent Management</h1>
         <button onClick={() => setShowModal(true)} className="add-btn">
           Add Parent
         </button>

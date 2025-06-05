@@ -65,7 +65,7 @@ export default function ParentLogin() {
           <input
             type={showPassword ? "text" : "password"}
             className="login-input"
-            placeholder="Passkey"
+            placeholder="Pass key"
             value={passKey}
             onChange={(e) => setPassKey(e.target.value)}
             required
@@ -77,6 +77,12 @@ export default function ParentLogin() {
           <button type="submit" className="login-button">
             Login
           </button>
+
+          <p className="info">
+            *If you don't have an account or you forgot your email/pass key, you are
+            required to contact the admin.
+          </p>
+
           {error && <p className="login-error">{error}</p>}
         </form>
       </div>

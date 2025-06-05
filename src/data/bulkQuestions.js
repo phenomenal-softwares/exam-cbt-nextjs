@@ -1,188 +1,143 @@
-// data/bulkQuestions.js
 const bulkQuestions = [
   {
-    question: "Which subatomic particle is negatively charged?",
-    options: ["Proton", "Neutron", "Electron", "Positron"],
-    answer: "Electron"
+    question: "What is the primary purpose of office correspondence?",
+    options: ["To store documents", "To communicate formally within and outside the organization", "To manage office supplies", "To schedule meetings"],
+    answer: "To communicate formally within and outside the organization"
   },
   {
-    question: "The number of protons in the nucleus of an atom is called its:",
-    options: ["Atomic weight", "Mass number", "Atomic number", "Isotope"],
-    answer: "Atomic number"
+    question: "Which of the following is a key responsibility of an office administrator?",
+    options: ["Managing the financial records of the company", "Supervising the technical team", "Coordinating office activities and communications", "Designing the company's marketing strategy"],
+    answer: "Coordinating office activities and communications"
   },
   {
-    question: "Which of these is a noble gas?",
-    options: ["Oxygen", "Nitrogen", "Argon", "Hydrogen"],
-    answer: "Argon"
+    question: "What does the term 'filling system' refer to in an office setting?",
+    options: ["A computer system for storing data", "A method of organizing physical and digital files for easy retrieval", "A software used for financial management", "A technique for organizing office staff"],
+    answer: "A method of organizing physical and digital files for easy retrieval"
   },
   {
-    question: "Which type of bond involves sharing of electrons?",
-    options: ["Ionic bond", "Covalent bond", "Metallic bond", "Hydrogen bond"],
-    answer: "Covalent bond"
+    question: "Which of the following is a common method of record-keeping in an office?",
+    options: ["Pen and paper", "Electronic filing system", "Paperless storage", "All of the above"],
+    answer: "Electronic filing system"
   },
   {
-    question: "What is the chemical symbol for Potassium?",
-    options: ["P", "Po", "Pt", "K"],
-    answer: "K"
+    question: "What is the purpose of an office diary?",
+    options: ["To record personal events", "To keep track of business appointments, meetings, and deadlines", "To store customer feedback", "To manage office supplies"],
+    answer: "To keep track of business appointments, meetings, and deadlines"
   },
   {
-    question: "Which gas law states that volume is directly proportional to temperature?",
-    options: ["Boyle's Law", "Charles's Law", "Dalton’s Law", "Avogadro’s Law"],
-    answer: "Charles's Law"
+    question: "Which of the following is an example of formal office communication?",
+    options: ["Personal notes", "Email to a colleague about lunch", "Memo to the management team about a meeting", "Informal chat with a coworker"],
+    answer: "Memo to the management team about a meeting"
   },
   {
-    question: "Which of the following is a base?",
-    options: ["NaCl", "H2SO4", "NaOH", "CO2"],
-    answer: "NaOH"
+    question: "What does 'confidentiality' in office practice refer to?",
+    options: ["The ability to communicate freely with coworkers", "The need to secure sensitive company information from unauthorized access", "The importance of maintaining office decorum", "Ensuring employees are well-dressed"],
+    answer: "The need to secure sensitive company information from unauthorized access"
   },
   {
-    question: "Which of these is used to test for the presence of water?",
-    options: ["Blue litmus paper", "Anhydrous copper(II) sulfate", "Limewater", "Red litmus paper"],
-    answer: "Anhydrous copper(II) sulfate"
+    question: "What is a 'business letter' primarily used for?",
+    options: ["Casual communication with clients", "Formal communication with clients, suppliers, and business partners", "Sending personal messages", "Sharing personal opinions about company policies"],
+    answer: "Formal communication with clients, suppliers, and business partners"
   },
   {
-    question: "A substance that speeds up a reaction without being consumed is called:",
-    options: ["Reactant", "Product", "Catalyst", "Isotope"],
-    answer: "Catalyst"
+    question: "Which of the following best defines 'minutes of meeting'?",
+    options: ["A summary of a meeting's discussion, decisions, and action points", "An invitation for a meeting", "A detailed report on a project's progress", "A formal speech made during a meeting"],
+    answer: "A summary of a meeting's discussion, decisions, and action points"
   },
   {
-    question: "The pH of a neutral solution is:",
-    options: ["0", "14", "1", "7"],
-    answer: "7"
-  },
-
-  // 30 more...
-  {
-    question: "What is the atomic number of Oxygen?",
-    options: ["6", "7", "8", "9"],
-    answer: "8"
+    question: "What is the role of a receptionist in an office setting?",
+    options: ["To prepare financial statements", "To answer phone calls, schedule appointments, and greet visitors", "To manage company logistics", "To handle office inventory"],
+    answer: "To answer phone calls, schedule appointments, and greet visitors"
   },
   {
-    question: "The periodic table is arranged in order of increasing:",
-    options: ["Atomic size", "Mass number", "Atomic number", "Density"],
-    answer: "Atomic number"
+    question: "What does the term 'office protocol' refer to?",
+    options: ["Rules governing the use of office equipment", "The system of formal conduct and etiquette followed in an office environment", "The schedule of office meetings", "The method of managing employee work shifts"],
+    answer: "The system of formal conduct and etiquette followed in an office environment"
   },
   {
-    question: "The SI unit of pressure is:",
-    options: ["Newton", "Pascal", "Joule", "Watt"],
-    answer: "Pascal"
+    question: "Which of the following is a responsibility of an office manager?",
+    options: ["Managing the payroll", "Planning the office’s budget", "Setting up company-wide meetings", "Coordinating office activities and resources"],
+    answer: "Coordinating office activities and resources"
   },
   {
-    question: "What is the molar volume of a gas at STP?",
-    options: ["24 dm³", "22.4 dm³", "20 dm³", "18 dm³"],
-    answer: "22.4 dm³"
+    question: "What is an 'office memo'?",
+    options: ["A formal letter used to communicate with external parties", "A brief written communication used within the office to convey important information", "A record of office supplies", "A document detailing employee performance evaluations"],
+    answer: "A brief written communication used within the office to convey important information"
   },
   {
-    question: "Which element is a halogen?",
-    options: ["Chlorine", "Sodium", "Magnesium", "Calcium"],
-    answer: "Chlorine"
+    question: "Which of the following is an example of office equipment?",
+    options: ["Computers", "Printers", "Photocopiers", "All of the above"],
+    answer: "All of the above"
   },
   {
-    question: "Which process converts a solid directly into a gas?",
-    options: ["Condensation", "Evaporation", "Sublimation", "Freezing"],
-    answer: "Sublimation"
+    question: "What is the role of an office filing system?",
+    options: ["To store sensitive data in a secure location", "To organize documents for easy retrieval and reference", "To reduce paper waste", "To store only financial records"],
+    answer: "To organize documents for easy retrieval and reference"
   },
   {
-    question: "Which of these is a hydrocarbon?",
-    options: ["HCl", "CH4", "NaOH", "CO2"],
-    answer: "CH4"
+    question: "What is the purpose of an office schedule?",
+    options: ["To plan and organize daily activities, meetings, and appointments", "To reduce the need for meetings", "To assign specific tasks to each employee", "To track the company’s performance"],
+    answer: "To plan and organize daily activities, meetings, and appointments"
   },
   {
-    question: "The formula for calcium hydroxide is:",
-    options: ["Ca(OH)₂", "CaOH", "CaH", "CaO₂"],
-    answer: "Ca(OH)₂"
+    question: "Which of the following is a characteristic of a good office communication system?",
+    options: ["It ensures fast and clear communication", "It allows for multiple personal conversations", "It avoids formal messages", "It includes only email communication"],
+    answer: "It ensures fast and clear communication"
   },
   {
-    question: "Which acid is found in car batteries?",
-    options: ["Hydrochloric acid", "Sulfuric acid", "Nitric acid", "Acetic acid"],
-    answer: "Sulfuric acid"
+    question: "Which of the following is an important aspect of office time management?",
+    options: ["Avoiding breaks", "Setting priorities and sticking to deadlines", "Scheduling as many meetings as possible", "Avoiding delegation of tasks"],
+    answer: "Setting priorities and sticking to deadlines"
   },
   {
-    question: "Which of these metals reacts vigorously with water?",
-    options: ["Gold", "Iron", "Sodium", "Copper"],
-    answer: "Sodium"
-  },
-
-  {
-    question: "Which of the following is a physical change?",
-    options: ["Burning wood", "Rusting iron", "Melting ice", "Baking a cake"],
-    answer: "Melting ice"
+    question: "What is the primary function of a 'call log' in an office?",
+    options: ["To document office maintenance issues", "To record all incoming and outgoing calls for follow-up or reference", "To store employee attendance records", "To keep track of office supplies"],
+    answer: "To record all incoming and outgoing calls for follow-up or reference"
   },
   {
-    question: "The electron configuration of carbon is:",
-    options: ["1s² 2s² 2p²", "1s² 2s² 2p⁶", "1s² 2s²", "1s² 2s² 3p²"],
-    answer: "1s² 2s² 2p²"
+    question: "What is the purpose of office ergonomics?",
+    options: ["To ensure employees have comfortable working spaces that enhance productivity", "To improve the design of office furniture", "To keep the office clean and organized", "To create a stress-free office environment"],
+    answer: "To ensure employees have comfortable working spaces that enhance productivity"
   },
   {
-    question: "The most reactive group in the periodic table is:",
-    options: ["Noble gases", "Transition metals", "Halogens", "Alkali metals"],
-    answer: "Alkali metals"
+    question: "What is a 'job description' in an office environment?",
+    options: ["A document outlining the tasks and responsibilities of a particular role", "A list of tasks for an employee to do each day", "A report on an employee’s performance", "A list of office supplies needed"],
+    answer: "A document outlining the tasks and responsibilities of a particular role"
   },
   {
-    question: "What is the oxidation state of hydrogen in H₂O?",
-    options: ["+1", "-1", "0", "+2"],
-    answer: "+1"
+    question: "What does the term 'office automation' refer to?",
+    options: ["The use of machines to complete manual tasks", "The integration of software tools to streamline office tasks and improve efficiency", "The installation of automatic doors in offices", "The outsourcing of administrative tasks"],
+    answer: "The integration of software tools to streamline office tasks and improve efficiency"
   },
   {
-    question: "A solution with a pH less than 7 is:",
-    options: ["Neutral", "Basic", "Acidic", "Alkaline"],
-    answer: "Acidic"
+    question: "Which of the following is an example of a good office practice?",
+    options: ["Keeping sensitive documents in unlocked drawers", "Organizing emails by importance", "Using personal mobile phones for work-related calls", "Ignoring the office dress code"],
+    answer: "Organizing emails by importance"
   },
   {
-    question: "What is the valency of nitrogen?",
-    options: ["2", "3", "5", "7"],
-    answer: "3"
+    question: "What is an 'outgoing mail register' used for in an office?",
+    options: ["To track the items received by the office", "To log all outgoing correspondence and packages", "To keep track of employee attendance", "To schedule office meetings"],
+    answer: "To log all outgoing correspondence and packages"
   },
   {
-    question: "The ratio of atoms in H₂O is:",
-    options: ["1:1", "2:1", "1:2", "2:2"],
-    answer: "2:1"
+    question: "What does 'conflict resolution' in the office setting involve?",
+    options: ["Ignoring workplace disagreements", "Addressing and resolving disputes between employees in a fair and professional manner", "Encouraging competition among coworkers", "Increasing employee workloads"],
+    answer: "Addressing and resolving disputes between employees in a fair and professional manner"
   },
   {
-    question: "Which gas turns limewater milky?",
-    options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
-    answer: "Carbon dioxide"
+    question: "What is the role of 'office supplies management'?",
+    options: ["To ensure the office has necessary resources like stationery and equipment", "To organize employee schedules", "To oversee the company's finances", "To manage employee records"],
+    answer: "To ensure the office has necessary resources like stationery and equipment"
   },
   {
-    question: "An element with 2 electrons in its outer shell belongs to group:",
-    options: ["II", "IV", "VI", "VIII"],
-    answer: "II"
+    question: "What is the purpose of a 'telephone etiquette' in the office?",
+    options: ["To improve office aesthetics", "To ensure professional communication over the phone", "To restrict phone use in the office", "To avoid communication with clients"],
+    answer: "To ensure professional communication over the phone"
   },
   {
-    question: "What is the chemical symbol of Iron?",
-    options: ["Ir", "Fe", "In", "I"],
-    answer: "Fe"
-  },
-
-  {
-    question: "The compound HCl is best described as:",
-    options: ["Basic oxide", "Salt", "Alkali", "Acid"],
-    answer: "Acid"
-  },
-  {
-    question: "A redox reaction involves:",
-    options: ["Only oxidation", "Only reduction", "Both oxidation and reduction", "Neither oxidation nor reduction"],
-    answer: "Both oxidation and reduction"
-  },
-  {
-    question: "Which of these elements is a metalloid?",
-    options: ["Silicon", "Sodium", "Sulfur", "Copper"],
-    answer: "Silicon"
-  },
-  {
-    question: "What is the charge of a sulfate ion (SO₄)?",
-    options: ["1-", "2-", "2+", "1+"],
-    answer: "2-"
-  },
-  {
-    question: "Which apparatus is used to measure temperature?",
-    options: ["Voltmeter", "Thermometer", "Ammeter", "Barometer"],
-    answer: "Thermometer"
-  },
-  {
-    question: "Which of these substances is a mixture?",
-    options: ["Air", "Water", "Oxygen", "Carbon dioxide"],
-    answer: "Air"
+    question: "What is the best way to ensure effective office communication?",
+    options: ["Sending emails only", "Holding frequent meetings", "Having a clear and structured communication system", "Relying solely on informal discussions"],
+    answer: "Having a clear and structured communication system"
   }
 ];
 

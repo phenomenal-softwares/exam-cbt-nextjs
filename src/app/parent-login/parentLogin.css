@@ -1,14 +1,10 @@
-
-.main-container {
-  background: ivory;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-min-height: 100vh;
-}
-
 .parent-login-container {
-  max-width: 400px;
-  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 500px;
   padding: 30px;
   background-color: ivory;
   border-radius: 12px;
@@ -24,6 +20,7 @@ min-height: 100vh;
 
 .login-form {
   display: flex;
+  width: 100%;
   flex-direction: column;
 }
 
@@ -63,4 +60,11 @@ min-height: 100vh;
   color: #b00020;
   font-size: 14px;
   margin-top: 10px;
+}
+
+.info {
+  font-style: italic;
+  color: blueviolet;
+  margin-top: 10px;
+  padding: 20px;
 }

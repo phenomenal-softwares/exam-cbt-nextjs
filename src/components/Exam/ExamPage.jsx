@@ -6,6 +6,7 @@ import { db } from "@/services/firebase";
 import SuccessModal from "@/components/UI/Modal/SuccessModal";
 import { useRouter } from "next/navigation";
 import { updateSubjectExamStatus } from "@/utils/updateSubjectExamStatus";
+import { getConfigForSubject } from "@/utils/getConfigForSubject";
 import LoadingOverlay from "../UI/LoadingOverlay/LoadingOverlay";
 import ConfirmationModal from "../UI/Modal/ConfirmationModal";
 import Letterhead from "../UI/Letterhead/Letterhead";
@@ -17,8 +18,7 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [studentAnswers, setStudentAnswers] = useState(Array(20).fill(null));
-  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes = 900 seconds
-  const [answers, setAnswers] = useState(Array(20).fill(null));
+  const [timeLeft, setTimeLeft] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -26,30 +26,38 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const questionsRef = collection(
-          db,
-          `Questions/${classLevel}/${subject}`
-        );
-        const querySnapshot = await getDocs(questionsRef);
-        const allQuestions = querySnapshot.docs.map((doc) => doc.data());
+  const fetchConfigAndQuestions = async () => {
+    if (!subject || !classLevel) return;
 
-        // Randomize and select 20 questions
-        const shuffled = allQuestions.sort(() => 0.5 - Math.random());
-        const selected = shuffled.slice(0, 20);
-        setQuestions(selected);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      setLoading(true);
 
-    if (subject && classLevel) {
-      fetchQuestions();
+      const { totalQuestions, timeLimit } = await getConfigForSubject(classLevel, subject);
+
+      // Fetch all questions (excluding the config doc)
+      const questionsRef = collection(db, `Questions/${classLevel}/${subject}`);
+      const querySnapshot = await getDocs(questionsRef);
+
+      const allQuestions = querySnapshot.docs
+        .filter(doc => doc.id !== "config")
+        .map(doc => doc.data());
+
+      const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, totalQuestions);
+
+      setQuestions(selected);
+      setStudentAnswers(Array(totalQuestions).fill(null));
+      setTimeLeft(timeLimit * 60);
+    } catch (error) {
+      console.error("Error fetching exam data:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [subject, classLevel]);
+  };
+
+  fetchConfigAndQuestions();
+}, [subject, classLevel]);
+
 
   useEffect(() => {
     if (submitted) return; // Don't run timer if exam already submitted
@@ -105,7 +113,7 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   };
 
   if (loading) return <LoadingOverlay />;
-  if (!questions.length) return <p>No questions found for this exam.</p>;
+  if (!questions.length) return <p className="no-data">No questions found for this exam. Please contact the admin.</p>;
 
   const currentQuestion = questions[currentQuestionIndex];
 

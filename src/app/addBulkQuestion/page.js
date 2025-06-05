@@ -1,6 +1,6 @@
 'use client';
 
-import AddQuestions from "@/components/Admin/AddQuestions";
+import AddQuestions from "@/components/AddQuestions";
 
 export default function AddBulkQuestionPage() {
   return (

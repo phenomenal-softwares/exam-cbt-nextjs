@@ -7,7 +7,6 @@
 .qm-title {
   text-align: center;
   color: blueviolet;
-  margin-top: 20px;
 }
 
 .filters {
@@ -35,6 +34,68 @@
   border-radius: 6px;
   font-size: 1rem;
 }
+
+.config-section {
+  background-color: #ebebda;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid blueviolet;
+  border-radius: 10px;
+}
+
+.config-input-group {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.config-input-group label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: blueviolet;
+  font-size: 14px;
+}
+
+.config-input-group input {
+  padding: 8px;
+  border: 1px solid blueviolet;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fdfdfd;
+  color: #333;
+}
+
+.config-input-group button {
+  padding: 10px 20px;
+  background-color: blueviolet;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.config-input-group button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.exam-config-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: #333;
+}
+
 
 .primary-btn {
   background-color: blueviolet;

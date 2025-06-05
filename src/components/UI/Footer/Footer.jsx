@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer style={footerStyle}>
       <a
-        href="https://abiodunojo.vercel.app"
+        href="https://wa.me/qr/CGJDY2K62Z7BB1"
         target="_blank"
         rel="noopener noreferrer"
         style={linkStyle}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/services/firebase";
 import { useRouter } from "next/navigation";
 import ParentDashboard from "@/components/Parent/ParentDashboard";
 import Letterhead from "@/components/UI/Letterhead/Letterhead";
@@ -12,15 +14,34 @@ export default function ParentPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const session = localStorage.getItem("parentSession");
-    if (!session) {
+  const session = localStorage.getItem("parentSession");
+  if (!session) {
+    router.push("/parent-login");
+    return;
+  }
+
+  const { parentId } = JSON.parse(session);
+
+  const verifyParent = async () => {
+    try {
+      const docRef = doc(db, "parents", parentId);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        localStorage.removeItem("parentSession");
+        router.push("/parent-login");
+      } else {
+        setParentId(parentId);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error verifying parent:", error);
+      localStorage.removeItem("parentSession");
       router.push("/parent-login");
-    } else {
-      const { parentId } = JSON.parse(session);
-      setParentId(parentId);
-      setLoading(false);
     }
-  }, [router]);
+  };
+
+  verifyParent();
+}, [router]);
 
   if (loading) return <LoadingOverlay />;
 

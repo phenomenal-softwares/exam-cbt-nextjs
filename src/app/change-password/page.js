@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
 import { auth } from '@/services/firebase';
+import { useRouter } from 'next/navigation';
 import './changePassword.css';
 
 export default function ChangePasswordPage() {
@@ -12,6 +13,8 @@ export default function ChangePasswordPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -76,6 +79,10 @@ export default function ChangePasswordPage() {
         <button type="submit" disabled={loading}>
           {loading ? 'Updating...' : 'Change Password'}
         </button>
+
+          <button type="button" className='back-btn' onClick={() => router.push("/dashboard")}>
+            Back
+          </button>
       </form>
 
       {message && <p className="success">{message}</p>}

@@ -12,6 +12,7 @@ const NoDataError = () => (
         credentials or ensure that your account has been set up correctly. If
         the problem persists, please contact the exam admin.
       </p>
+      <p>You are being redirected to the login page immediately</p>
     </div>
   </div>
 );
