@@ -82,6 +82,8 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   };
 
   const handleSubmit = async () => {
+    setShowConfirmation(false)
+
     let score = 0;
 
     questions.forEach((question, index) => {
@@ -91,9 +93,10 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
     });
 
     try {
+      setLoading(true);
       await updateSubjectExamStatus(uid, subject, score);
-      setShowConfirmation(false);
       setSubmitted(true);
+      setLoading(false);
       setShowModal(true);
     } catch (error) {
       console.error("Failed to save exam:", error);
