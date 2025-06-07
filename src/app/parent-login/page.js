@@ -37,7 +37,6 @@ export default function ParentLogin() {
         return;
       }
 
-      const parentData = querySnapshot.docs[0].data();
       const parentId = querySnapshot.docs[0].id;
 
       // Save session to localStorage

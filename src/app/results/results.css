@@ -119,6 +119,11 @@
   background-color: #003f7f;
 }
 
+.hidden-print-container {
+  display: none;
+}
+
+
 @media (max-width: 768px) {
   html,
   body {

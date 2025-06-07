@@ -93,31 +93,27 @@ export default function ResultsPage({
   };
 
   const handleDownloadPDF = async () => {
-  const element = document.getElementById("pdf-container");
-  if (!element) return;
+    const element = document.getElementById("pdf-export-container");
+    if (!element) return;
 
-  const html2canvas = (await import("html2canvas")).default;
-  const jsPDF = (await import("jspdf")).jsPDF;
+    const html2canvas = (await import("html2canvas")).default;
+    const jsPDF = (await import("jspdf")).jsPDF;
 
-  const canvas = await html2canvas(element, {
-    scale: 2,
-    useCORS: true,
-    scrollY: -window.scrollY,
-  });
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      scrollY: -window.scrollY,
+    });
 
-  const imgData = canvas.toDataURL("image/png");
-  const pdf = new jsPDF("p", "mm", "a4");
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
 
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-  const maxHeight = pdf.internal.pageSize.getHeight();
-  const finalHeight = Math.min(pdfHeight, maxHeight); // Prevent too tall pages
-
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, finalHeight);
-  pdf.save(`${student.fullName}_Result.pdf`);
-};
-
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`${student.fullName}_Result.pdf`);
+  };
 
   if (loading) return <LoadingOverlay />;
 
@@ -210,6 +206,84 @@ export default function ResultsPage({
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      {/* Hidden results container for pdf download */}
+      <div id="pdf-export-container" style={{ display: "none" }}>
+        <Letterhead />
+        <div className="results-container">
+          <h3 className="results-title">EXAM RESULTS</h3>
+
+          {/* Minimal Profile Info */}
+          <div style={{ marginBottom: "1rem" }}>
+            <p>
+              <strong>Name:</strong> {student.fullName}
+            </p>
+            <p>
+              <strong>Class:</strong> {student.class}
+            </p>
+            <p>
+              <strong>Department:</strong> {student.department}
+            </p>
+            <p>
+              <strong>Student ID:</strong> {student.studentId}
+            </p>
+          </div>
+
+          {/* Printable Results Table */}
+          <table
+            style={{ width: "100%", borderCollapse: "collapse" }}
+            border="1"
+          >
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Grade</th>
+                <th>Remark</th>
+              </tr>
+            </thead>
+            <tbody>
+              {student.subjects.map((subject, index) => {
+                const { name, score, examTaken } = subject;
+                const config = subjectConfig[name] || { totalQuestions: 20 };
+                const totalQuestions = config.totalQuestions;
+
+                if (!examTaken) {
+                  return (
+                    <tr key={index}>
+                      <td>{name}</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                    </tr>
+                  );
+                }
+
+                const percentage = ((score / totalQuestions) * 100).toFixed(2);
+                const { grade, remark } = getGradeAndRemark(
+                  score,
+                  totalQuestions
+                );
+
+                return (
+                  <tr key={index}>
+                    <td>{name}</td>
+                    <td>{score}</td>
+                    <td>{totalQuestions}</td>
+                    <td>{percentage}%</td>
+                    <td>{grade}</td>
+                    <td>{remark}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
 
