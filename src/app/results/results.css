@@ -120,7 +120,7 @@
 }
 
 #pdf-container-download {
-  width: 800px; /* standard A4 width */
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -188,7 +188,77 @@
 }
 
 @media print {
-  .results-buttons {
+  body,
+  html {
+    background: white !important;
+    color: black !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .main-container,
+  .results-container,
+  .table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    background: white !important;
+  }
+
+  .profile-card {
+    flex-direction: row !important;
+    text-align: left !important;
+    box-shadow: none !important;
+    background: none !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .student-photo {
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: cover !important;
+    border: 2px solid #aaa !important;
+  }
+
+  .student-name {
+    font-size: 1.4rem !important;
+  }
+
+  .details-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem !important;
+    background: none !important;
+    padding: 0 !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .results-table {
+    display: table !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    border-collapse: collapse !important;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 0.75rem 1rem !important;
+    text-align: center !important;
+    border: 1px solid #000 !important;
+  }
+
+  .results-table thead {
+    display: table-header-group !important;
+    background-color: #f0f0f0 !important;
+    font-weight: bold !important;
+  }
+
+  .results-buttons,
+  .btn,
+  .back-btn,
+  .print-btn {
     display: none !important;
   }
 }
