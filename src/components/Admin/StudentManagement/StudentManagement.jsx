@@ -9,7 +9,7 @@ import ConfirmationModal from "@/components/UI/Modal/ConfirmationModal";
 import SuccessModal from "@/components/UI/Modal/SuccessModal";
 
 import "@/components/UI/Modal/ModalStyles.css";
-import "./studentManagement.css";
+import "./StudentManagement.css";
 import "@/components/UI/LoadingOverlay/LoadingOverlay.css";
 
 export default function StudentManagement() {

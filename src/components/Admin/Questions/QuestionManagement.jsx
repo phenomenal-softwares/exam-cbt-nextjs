@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import QuestionListTable from "@/components/admin/Questions/QuestionListTable";
+import QuestionListTable from "@/components/Admin/Questions/QuestionListTable";
 import { db } from "@/services/firebase";
 import {
   collection,
@@ -14,7 +14,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 
-import QuestionForm from "@/components/admin/Questions/QuestionForm";
+import QuestionForm from "@/components/Admin/Questions/QuestionForm";
 import ConfirmationModal from "@/components/UI/Modal/ConfirmationModal";
 import SuccessModal from "@/components/UI/Modal/SuccessModal";
 
