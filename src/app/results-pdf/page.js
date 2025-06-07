@@ -6,17 +6,13 @@ import { auth } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { getGradeAndRemark } from "@/utils/getGradeAndRemark";
-
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import ResultsPdf from "../results-pdf/page";
 import Letterhead from "@/components/UI/Letterhead/Letterhead";
 import LoadingOverlay from "@/components/UI/LoadingOverlay/LoadingOverlay";
 import NoDataError from "@/components/Error/NoDataError";
 
 import "./results.css";
 
-export default function ResultsPage({
+export default function ResultsPdf({
   passedStudent = null,
   onClose = null,
   isExport = false,
@@ -92,36 +88,35 @@ export default function ResultsPage({
     fetchStudentData();
   }, [router, passedStudent]);
 
-  ResultsPage.defaultProps = {
+  ResultsPdf.defaultProps = {
     passedStudent: null,
   };
 
- const handleDownloadResult = async () => {
-    
-    setTimeout(async () => {
-      const input = document.getElementById("pdf-container-download");
-      if (!input) return;
+  const handleDownloadPDF = async () => {
+  const element = document.getElementById("pdf-container");
+  if (!element) return;
 
-      const canvas = await html2canvas(input, {
-        scale: 2,
-        useCORS: true,
-        scrollY: -window.scrollY,
-      });
+  const html2canvas = (await import("html2canvas")).default;
+  const jsPDF = (await import("jspdf")).jsPDF;
 
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+    scrollY: -window.scrollY,
+  });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF("p", "mm", "a4");
 
-      // If pdfHeight is longer than A4, cap it
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const finalHeight = Math.min(pdfHeight, pageHeight);
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, finalHeight);
-      pdf.save(`${student.fullName}_Result.pdf`);
-    }, 500);
-  };
+  const maxHeight = pdf.internal.pageSize.getHeight();
+  const finalHeight = Math.min(pdfHeight, maxHeight); // Prevent too tall pages
+
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, finalHeight);
+  pdf.save(`${student.fullName}_Result.pdf`);
+};
 
 
   if (loading) return <LoadingOverlay />;
@@ -218,18 +213,6 @@ export default function ResultsPage({
         </div>
       </div>
 
-      <div style={{ position: "absolute", top: "-9999px", left: "-9999px" }}>
-        <div id="pdf-container-download">
-          {student && (
-            <ResultsPdf
-              passedStudent={student}
-              onClose={() => {}}
-              isExport={true} // optional prop if needed to hide buttons
-            />
-          )}
-        </div>
-      </div>
-
       {/* Footer Buttons */}
       {!isExport && (
         <div className="results-buttons">
@@ -246,7 +229,7 @@ export default function ResultsPage({
             </button>
           )}
 
-          <button onClick={handleDownloadResult} className="btn print-btn">
+          <button onClick={handleDownloadPDF} className="btn print-btn">
             Download Result
           </button>
         </div>

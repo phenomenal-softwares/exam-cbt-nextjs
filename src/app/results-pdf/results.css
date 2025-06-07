@@ -119,13 +119,8 @@
   background-color: #003f7f;
 }
 
-#pdf-container-download {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
+.hidden-print-container {
+  display: none;
 }
 
 
