@@ -17,6 +17,8 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const [studentAnswers, setStudentAnswers] = useState(Array(20).fill(null));
   const [timeLeft, setTimeLeft] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -26,66 +28,86 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   const router = useRouter();
 
   useEffect(() => {
-  const fetchConfigAndQuestions = async () => {
-    if (!subject || !classLevel) return;
+    const fetchConfigAndQuestions = async () => {
+      if (!subject || !classLevel) return;
 
-    try {
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      const { totalQuestions, timeLimit } = await getConfigForSubject(classLevel, subject);
+        const { totalQuestions, timeLimit } = await getConfigForSubject(
+          classLevel,
+          subject
+        );
 
-      // Fetch all questions (excluding the config doc)
-      const questionsRef = collection(db, `Questions/${classLevel}/${subject}`);
-      const querySnapshot = await getDocs(questionsRef);
+        // Fetch all questions (excluding the config doc)
+        const questionsRef = collection(
+          db,
+          `Questions/${classLevel}/${subject}`
+        );
+        const querySnapshot = await getDocs(questionsRef);
 
-      const allQuestions = querySnapshot.docs
-        .filter(doc => doc.id !== "config")
-        .map(doc => doc.data());
+        const allQuestions = querySnapshot.docs
+          .filter((doc) => doc.id !== "config")
+          .map((doc) => doc.data());
 
-      const shuffled = allQuestions.sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, totalQuestions);
+        const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, totalQuestions);
 
-      setQuestions(selected);
-      setStudentAnswers(Array(totalQuestions).fill(null));
-      setTimeLeft(timeLimit * 60);
-    } catch (error) {
-      console.error("Error fetching exam data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setQuestions(selected);
+        setStudentAnswers(Array(totalQuestions).fill(null));
+        setTimeLeft(timeLimit * 60);
+      } catch (error) {
+        console.error("Error fetching exam data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchConfigAndQuestions();
-}, [subject, classLevel]);
-
+    fetchConfigAndQuestions();
+  }, [subject, classLevel]);
 
   useEffect(() => {
-    if (submitted) return; // Don't run timer if exam already submitted
+    if (submitted) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev === 1) {
           clearInterval(timer);
-          handleSubmit(); // auto-submit
+
+          // ⬇️ Save current selection to studentAnswers before submission
+          setStudentAnswers((prevAnswers) => {
+            const updated = [...prevAnswers];
+            updated[currentQuestionIndex] = selectedOption;
+            return updated;
+          });
+
+          setTimeout(() => {
+            handleSubmit(); // Delay slightly to ensure state updates
+          }, 100); // tiny delay to let setState propagate
         }
+
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timer); // clean up
-  }, [submitted]);
+    return () => clearInterval(timer);
+  }, [submitted, selectedOption, currentQuestionIndex]);
 
-  const handleAnswerSelect = (index, selectedOption) => {
+  const handleAnswerSelect = (index, option) => {
     const updatedAnswers = [...studentAnswers];
-    updatedAnswers[index] = selectedOption;
+    updatedAnswers[index] = option;
     setStudentAnswers(updatedAnswers);
+    setSelectedOption(option);
   };
 
+  useEffect(() => {
+    setSelectedOption(studentAnswers[currentQuestionIndex]);
+  }, [currentQuestionIndex]);
+
   const handleSubmit = async () => {
-    setShowConfirmation(false)
-
+    setShowConfirmation(false);
+    setLoading(true);
     let score = 0;
-
     questions.forEach((question, index) => {
       if (studentAnswers[index] === question.answer) {
         score += 1;
@@ -93,13 +115,14 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
     });
 
     try {
-      setLoading(true);
       await updateSubjectExamStatus(uid, subject, score);
       setSubmitted(true);
       setLoading(false);
       setShowModal(true);
     } catch (error) {
       console.error("Failed to save exam:", error);
+      setLoading(false);
+      alert("Failed to submit exam");
     }
   };
 
@@ -116,7 +139,12 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
   };
 
   if (loading) return <LoadingOverlay />;
-  if (!questions.length) return <p className="no-data">No questions found for this exam. Please contact the admin.</p>;
+  if (!questions.length)
+    return (
+      <p className="no-data">
+        No questions found for this exam. Please contact the admin.
+      </p>
+    );
 
   const currentQuestion = questions[currentQuestionIndex];
 

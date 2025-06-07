@@ -14,8 +14,6 @@ import "./results.css";
 
 export default function ResultsPdf({
   passedStudent = null,
-  onClose = null,
-  isExport = false,
 }) {
   const router = useRouter();
   const [student, setStudent] = useState(passedStudent || null);
@@ -92,33 +90,6 @@ export default function ResultsPdf({
     passedStudent: null,
   };
 
-  const handleDownloadPDF = async () => {
-  const element = document.getElementById("pdf-container");
-  if (!element) return;
-
-  const html2canvas = (await import("html2canvas")).default;
-  const jsPDF = (await import("jspdf")).jsPDF;
-
-  const canvas = await html2canvas(element, {
-    scale: 2,
-    useCORS: true,
-    scrollY: -window.scrollY,
-  });
-
-  const imgData = canvas.toDataURL("image/png");
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  const maxHeight = pdf.internal.pageSize.getHeight();
-  const finalHeight = Math.min(pdfHeight, maxHeight); // Prevent too tall pages
-
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, finalHeight);
-  pdf.save(`${student.fullName}_Result.pdf`);
-};
-
-
   if (loading) return <LoadingOverlay />;
 
   if (!student) {
@@ -127,7 +98,6 @@ export default function ResultsPdf({
 
   return (
     <div className="main-container">
-      <div id="pdf-container">
         <Letterhead />
         <div className="results-container">
           <h3 className="results-title">STUDENT RESULTS</h3>
@@ -211,29 +181,6 @@ export default function ResultsPdf({
             </table>
           </div>
         </div>
-      </div>
-
-      {/* Footer Buttons */}
-      {!isExport && (
-        <div className="results-buttons">
-          {onClose ? (
-            <button onClick={onClose} className="btn back-btn">
-              Close
-            </button>
-          ) : (
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="btn back-btn"
-            >
-              Back to Dashboard
-            </button>
-          )}
-
-          <button onClick={handleDownloadPDF} className="btn print-btn">
-            Download Result
-          </button>
-        </div>
-      )}
     </div>
   );
 }
