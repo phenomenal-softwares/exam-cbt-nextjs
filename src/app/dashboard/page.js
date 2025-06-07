@@ -6,10 +6,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
-import StudentProfileCard from "@/components/dashboard/StudentProfileCard";
-import StudentDetailsGrid from "@/components/dashboard/StudentDetailsGrid";
-import SubjectsTable from "@/components/dashboard/SubjectsTable";
-import ResultsActions from "@/components/dashboard/ResultsActions";
+import StudentProfileCard from "@/components/Dashboard/StudentProfileCard";
+import StudentDetailsGrid from "@/components/Dashboard/StudentDetailsGrid";
+import SubjectsTable from "@/components/Dashboard/SubjectsTable";
+import ResultsActions from "@/components/Dashboard/ResultsActions";
 import Letterhead from "@/components/UI/Letterhead/Letterhead";
 import ConfirmationModal from "@/components/UI/Modal/ConfirmationModal";
 import SuccessModal from "@/components/UI/Modal/SuccessModal";

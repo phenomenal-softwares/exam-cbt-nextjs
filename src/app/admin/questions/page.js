@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import QuestionManagement from "@/components/admin/Questions/QuestionManagement";
+import QuestionManagement from "@/components/Admin/Questions/QuestionManagement";
 
 const QuestionsPage = () => {
   return <QuestionManagement />;
