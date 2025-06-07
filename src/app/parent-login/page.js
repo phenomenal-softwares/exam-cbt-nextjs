@@ -14,20 +14,22 @@ export default function ParentLogin() {
   const [email, setEmail] = useState("");
   const [passKey, setPassKey] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const q = query(
         collection(db, "parents"),
-        where("email", "==", email),
-        where("passKey", "==", passKey)
+        where("email", "==", email.trim().toLowerCase()),
+        where("passKey", "==", passKey.trim())
       );
+
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
@@ -40,10 +42,11 @@ export default function ParentLogin() {
 
       // Save session to localStorage
       localStorage.setItem("parentSession", JSON.stringify({ parentId }));
-
+      setLoading(false);
       router.push("/parent");
     } catch (err) {
       setError("Login failed. Please try again.");
+      setLoading(false);
       console.error(err);
     }
   };
@@ -56,10 +59,12 @@ export default function ParentLogin() {
         <form className="login-form" onSubmit={handleLogin}>
           <input
             type="email"
+            inputMode="email"
+            autoCapitalize="none"
             className="login-input"
             placeholder="Parent Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value.trimStart())}
             required
           />
           <input
@@ -67,20 +72,20 @@ export default function ParentLogin() {
             className="login-input"
             placeholder="Pass key"
             value={passKey}
-            onChange={(e) => setPassKey(e.target.value)}
+            onChange={(e) => setPassKey(e.target.value.trimStart())}
             required
           />
           <PasswordVisibility
             visible={showPassword}
             setVisible={setShowPassword}
           />
-          <button type="submit" className="login-button">
-            Login
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           <p className="info">
-            *If you don't have an account or you forgot your email/pass key, you are
-            required to contact the admin.
+            *If you don't have an account or you forgot your email/pass key, you
+            are required to contact the admin.
           </p>
 
           {error && <p className="login-error">{error}</p>}
