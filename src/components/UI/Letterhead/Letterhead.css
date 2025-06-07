@@ -85,3 +85,23 @@
     height: 50px;
   }
 }
+
+@media (max-width: 320px) {
+  .letterhead {
+    padding: 5px 10px;
+  }
+
+  .school-name {
+    font-size: 14px;
+  }
+
+  .school-address,
+  .exam-details {
+    font-size: 8px;
+  }
+
+  .logo-container img {
+    width: 30px;
+    height: 30px;
+  }
+}

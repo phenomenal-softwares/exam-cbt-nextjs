@@ -134,7 +134,7 @@ const ExamPage = ({ subject, classLevel, name, uid }) => {
 
           <div className="options">
             {currentQuestion.options.map((option, idx) => (
-              <label key={idx} className="option-label">
+              <label key={idx}>
                 <input
                   type="radio"
                   name={`question-${currentQuestionIndex}`}

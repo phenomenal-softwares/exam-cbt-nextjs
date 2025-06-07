@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ivory;
   min-height: 100vh;
 }
 
@@ -11,7 +10,6 @@
   width: 100%;
   margin: 2rem auto;
   padding: 1.5rem;
-  background-color: ivory;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
@@ -24,22 +22,11 @@
 }
 
 .exam-header h3 {
-  margin: 0;
-  font-size: 1.8rem;
-}
-
-.timer {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #b30000;
-}
-
-.exam-header h3 {
-  margin-top: 0.5rem;
   font-size: 1.3rem;
 }
 
 .timer {
+  text-align: center;
   margin-top: 0.5rem;
   font-size: 1.1rem;
   font-weight: bold;
@@ -140,20 +127,6 @@
   border: 2px solid #000;
 }
 
-.option {
-  padding: 0.6rem;
-  background: #eee;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-}
-
-.option.selected {
-  background: #d1e7dd;
-  font-weight: bold;
-}
-
 .submit-container {
   display: flex;
   justify-content: center;
@@ -197,7 +170,7 @@
 
   .exam-header {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.3rem;
     align-items: flex-start;
   }
 
@@ -274,5 +247,34 @@
     font-size: 1.1rem;
     padding: 1rem;
     text-align: center;
+  }
+}
+
+@media (max-width: 320px) {
+  .exam-header h3 {
+    font-size: 0.8rem;
+  }
+
+  .timer {
+    font-size: 0.65rem;
+  }
+
+  .question-box p {
+    font-size: 0.65rem;
+  }
+
+  .options label {
+    font-size: 0.6rem;
+  }
+
+  .question-nav-button {
+    width: 20px;
+    height: 20px;
+    font-size: 0.5rem;
+  }
+
+  .submit-btn {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
   }
 }

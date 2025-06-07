@@ -49,7 +49,7 @@ const Letterhead = () => {
           P.M.B 2317, ASA DAM, ILORIN, KWARA STATE
         </p>
         <div className="exam-details">
-          {loading ? 'WELCOME...' : `${term} ${session} INTEGRATED EXAM E-FACILITY`}
+          {loading ? 'WELCOME...' : `${term} ${session} INTEGRATED ASSESSMENT E-FACILITY`}
         </div>
       </div>
     </div>
