@@ -6,9 +6,6 @@ import { auth } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { getGradeAndRemark } from "@/utils/getGradeAndRemark";
-
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import ResultsPdf from "../results-pdf/page";
 import Letterhead from "@/components/UI/Letterhead/Letterhead";
 import LoadingOverlay from "@/components/UI/LoadingOverlay/LoadingOverlay";
@@ -96,34 +93,6 @@ export default function ResultsPage({
     passedStudent: null,
   };
 
- const handleDownloadResult = async () => {
-    
-    setTimeout(async () => {
-      const input = document.getElementById("pdf-container-download");
-      if (!input) return;
-
-      const canvas = await html2canvas(input, {
-        scale: 2,
-        useCORS: true,
-        scrollY: -window.scrollY,
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      // If pdfHeight is longer than A4, cap it
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const finalHeight = Math.min(pdfHeight, pageHeight);
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, finalHeight);
-      pdf.save(`${student.fullName}_Result.pdf`);
-    }, 500);
-  };
-
-
   if (loading) return <LoadingOverlay />;
 
   if (!student) {
@@ -132,101 +101,81 @@ export default function ResultsPage({
 
   return (
     <div className="main-container">
-      <div id="pdf-container">
-        <Letterhead />
-        <div className="results-container">
-          <h3 className="results-title">STUDENT RESULTS</h3>
-          {/* Profile Card */}
-          <div className="profile-card">
-            <img
-              src={student.photoURL}
-              alt="Student"
-              className="student-photo"
-            />
-            <div>
-              <h2 className="student-name">{student.fullName}</h2>
-              <p className="student-email">{student.email}</p>
-            </div>
+      <Letterhead />
+      <div className="results-container">
+        <h3 className="results-title">STUDENT RESULTS</h3>
+        {/* Profile Card */}
+        <div className="profile-card">
+          <img src={student.photoURL} alt="Student" className="student-photo" />
+          <div>
+            <h2 className="student-name">{student.fullName}</h2>
+            <p className="student-email">{student.email}</p>
           </div>
+        </div>
 
-          {/* Details Grid */}
-          <div className="details-grid">
-            <div>
-              <strong>Class:</strong> {student.class}
-            </div>
-            <div>
-              <strong>Department:</strong> {student.department}
-            </div>
-            <div>
-              <strong>Student ID:</strong> {student.studentId}
-            </div>
+        {/* Details Grid */}
+        <div className="details-grid">
+          <div>
+            <strong>Class:</strong> {student.class}
           </div>
+          <div>
+            <strong>Department:</strong> {student.department}
+          </div>
+          <div>
+            <strong>Student ID:</strong> {student.studentId}
+          </div>
+        </div>
 
-          {/* Results Table */}
-          <div className="table-wrapper">
-            <table className="results-table">
-              <thead>
-                <tr>
-                  <th>Subject</th>
-                  <th>Score</th>
-                  <th>Total</th>
-                  <th>Percentage</th>
-                  <th>Grade</th>
-                  <th>Remark</th>
-                </tr>
-              </thead>
-              <tbody>
-                {student.subjects.map((subject, index) => {
-                  const { name, score, examTaken } = subject;
-                  const config = subjectConfig[name] || { totalQuestions: 20 }; // Fallback to 20 if not found
-                  const totalQuestions = config.totalQuestions;
+        {/* Results Table */}
+        <div className="table-wrapper">
+          <table className="results-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Grade</th>
+                <th>Remark</th>
+              </tr>
+            </thead>
+            <tbody>
+              {student.subjects.map((subject, index) => {
+                const { name, score, examTaken } = subject;
+                const config = subjectConfig[name] || { totalQuestions: 20 }; // Fallback to 20 if not found
+                const totalQuestions = config.totalQuestions;
 
-                  if (!examTaken) {
-                    return (
-                      <tr key={index}>
-                        <td>{name}</td>
-                        <td>Nil</td>
-                        <td>Nil</td>
-                        <td>Nil</td>
-                        <td>Nil</td>
-                        <td>Nil</td>
-                      </tr>
-                    );
-                  }
-
-                  const percentage = ((score / totalQuestions) * 100).toFixed(
-                    2
-                  );
-                  const { grade, remark } = getGradeAndRemark(
-                    score,
-                    totalQuestions
-                  );
+                if (!examTaken) {
                   return (
                     <tr key={index}>
                       <td>{name}</td>
-                      <td>{score}</td>
-                      <td>{totalQuestions}</td>
-                      <td>{percentage}%</td>
-                      <td>{grade}</td>
-                      <td>{remark}</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
+                      <td>Nil</td>
                     </tr>
                   );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                }
 
-      <div style={{ position: "absolute", top: "-9999px", left: "-9999px" }}>
-        <div id="pdf-container-download">
-          {student && (
-            <ResultsPdf
-              passedStudent={student}
-              onClose={() => {}}
-              isExport={true} // optional prop if needed to hide buttons
-            />
-          )}
+                const percentage = ((score / totalQuestions) * 100).toFixed(2);
+                const { grade, remark } = getGradeAndRemark(
+                  score,
+                  totalQuestions
+                );
+                return (
+                  <tr key={index}>
+                    <td>{name}</td>
+                    <td>{score}</td>
+                    <td>{totalQuestions}</td>
+                    <td>{percentage}%</td>
+                    <td>{grade}</td>
+                    <td>{remark}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
 

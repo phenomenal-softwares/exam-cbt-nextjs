@@ -20,6 +20,10 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+.title {
+  color: blueviolet;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -124,6 +128,10 @@ button:hover {
     text-align: center;
   }
 
+  .student-details-grid p {
+    font-size: 13px;
+  }
+
   .info-grid {
     grid-template-columns: 1fr;
     gap: 15px;
@@ -137,7 +145,7 @@ button:hover {
   }
 
   .btn-secondary {
-    width: 100%;
+    width: 80%;
   }
 
   .subjects-table table {

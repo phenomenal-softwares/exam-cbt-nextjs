@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import WardsTable from "./WardsTable";
-import ResultsPage from "@/app/results/page";
+import ResultsPdf from "@/app/results-pdf/page";
 import MessageModal from "../UI/Modal/MessageModal";
 import { saveParentMessageToDatabase } from "@/utils/saveParentMessageToDatabase"; // adjust path if needed
 
@@ -121,7 +121,7 @@ export default function ParentDashboard({ parentId }) {
       <div style={{ position: "absolute", top: "-9999px", left: "-9999px" }}>
         <div id="pdf-container">
           {selectedStudent && (
-            <ResultsPage
+            <ResultsPdf
               passedStudent={selectedStudent}
               onClose={() => {}}
               isExport={true} // optional prop if needed to hide buttons

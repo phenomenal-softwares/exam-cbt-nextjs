@@ -34,6 +34,7 @@ export default function ParentLogin() {
 
       if (querySnapshot.empty) {
         setError("Invalid email or passkey.");
+        setLoading(false);
         return;
       }
 

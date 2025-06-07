@@ -119,16 +119,6 @@
   background-color: #003f7f;
 }
 
-#pdf-container-download {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
-}
-
-
 @media (max-width: 768px) {
   html,
   body {
@@ -141,7 +131,6 @@
     margin: 0 auto;
   }
   
-
   .results-title {
     font-size: 1.5rem;
     margin-bottom: 1rem;

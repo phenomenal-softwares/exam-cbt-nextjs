@@ -17,9 +17,9 @@ import LoadingOverlay from "@/components/UI/LoadingOverlay/LoadingOverlay";
 import MessageModal from "@/components/UI/Modal/MessageModal";
 
 import { saveMessageToDatabase } from "@/utils/saveMessageToDatabase";
+import NoDataError from "@/components/Error/NoDataError";
 
 import "../../styles/dashboard.css";
-import NoDataError from "@/components/Error/NoDataError";
 
 const DashboardPage = () => {
   const [studentData, setStudentData] = useState(null);
@@ -134,7 +134,7 @@ const DashboardPage = () => {
     <main className="main-container">
       <Letterhead />
       <div className="dashboard-container">
-        <h1>Student Dashboard</h1>
+        <h2 className="title">Student Dashboard</h2>
 
         <StudentProfileCard
           photoURL={studentData.photoURL}
