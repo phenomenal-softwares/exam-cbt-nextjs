@@ -120,7 +120,7 @@
 }
 
 #pdf-container-download {
-  width: 100%;
+  width: 800px; /* standard A4 width */
   height: 100%;
   display: flex;
   flex-direction: column;

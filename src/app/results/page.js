@@ -246,7 +246,7 @@ export default function ResultsPage({
             </button>
           )}
 
-          <button onClick={handleDownloadResult} className="btn print-btn">
+          <button onClick={(handleDownloadResult)} className="btn print-btn">
             Download Result
           </button>
         </div>
