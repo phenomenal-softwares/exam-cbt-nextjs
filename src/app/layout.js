@@ -17,7 +17,6 @@ export default function RootLayout({ children }) {
         />
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
-        <link rel="icon" href="/images/school-logo.png" />
       </head>
       <body>
         <div

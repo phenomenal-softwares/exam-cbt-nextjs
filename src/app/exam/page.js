@@ -1,21 +1,12 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import ExamPage from "@/components/Exam/ExamPage";
-import NoDataError from "@/components/Error/NoDataError";
+import { Suspense } from "react";
+import ExamSuspenseWrapper from "@/components/Exam/ExamSuspenseWrapper";
 
-const ExamRoutePage = () => {
-  const searchParams = useSearchParams();
-  const subject = searchParams.get("subject");
-  const classLevel = searchParams.get("classLevel");
-  const name = searchParams.get("name");
-  const uid = searchParams.get("uid");
-
-  if (!subject || !classLevel || !name || !uid) {
-    return <NoDataError />;
-  }
-
-  return <ExamPage subject={subject} classLevel={classLevel} name={name} uid={uid} />;
-};
-
-export default ExamRoutePage;
+export default function ExamPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading Exam...</div>}>
+      <ExamSuspenseWrapper />
+    </Suspense>
+  );
+}

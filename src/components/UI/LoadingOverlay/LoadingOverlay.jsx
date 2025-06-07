@@ -1,5 +1,5 @@
 import React from 'react';
-import './loadingOverlay.css';
+import './LoadingOverlay.css';
 
 export default function LoadingOverlay() {
   return (
