@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Integrated Assessment E-Facility  
+_A Digital Exam Solution by Phenomenal Productions_
 
-## Getting Started
+## Overview  
+The Integrated Assessment E-Facility is a comprehensive, web-based platform designed to manage exams, tests, assignments, and academic communication across schools, coaching centers, and educational institutions. Built with scalability, security, and user-friendliness in mind, this platform streamlines the way assessments are created, delivered, and reviewed.
 
-First, run the development server:
+## Core Features  
+### 🛠 Admin Suite  
+- Question Management (Bulk Add, Edit, Organize by Subject & Class)  
+- Student Registration & Management  
+- Results Monitoring & Grading  
+- Messaging Modules (Admin ↔ Students/Parents)  
+- Maintenance Mode Toggle  
+- Configurable Exam Settings (Time Limit, Question Count, Modes)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 📱 Student Portal  
+- Exam Dashboard  
+- Real-time Exams, CA Tests, and Assignments  
+- Instant Grading & Feedback  
+- Mobile-Friendly Interface  
+- Personalized Profile & Result History  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 👨‍👩‍👧 Parent Portal *(Premium Only)*  
+- View Wards' Academic Records  
+- Download Results  
+- Feedback Messaging to Admin  
+- Multi-Ward Account Linking  
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 🧑‍🏫 Teacher Module *(Enterprise)*  
+- Assignment & Test Creation  
+- Class Performance Monitoring  
+- Teacher ↔ Student Messaging  
+- Subject-Based Access Control
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Assessment Modes  
+- **Exams**  
+- **CA Tests**  
+- **Weekly/Daily Assignments**  
 
-## Learn More
+## Data & Record Persistence  
+- Student records stored per term/session depending on plan  
+- Secure Firestore backend with scalable architecture
 
-To learn more about Next.js, take a look at the following resources:
+## Technology Stack  
+- **Frontend:** Next.js, React  
+- **Backend:** Firebase (Auth, Firestore, Storage)  
+- **Styling:** Custom CSS  
+- **Deployment:** Vercel  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Packages & Pricing  
+Detailed in the [Pricing Brochure] — available options include:  
+- Starter Plan  
+- Professional Suite  
+- Family Suite  
+- Enterprise Package  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each plan varies by module access, data retention, and domain customization.
 
-## Deploy on Vercel
+## Requirements  
+To deploy and run the system effectively, the following are recommended:  
+- At least 1 admin laptop/tablet  
+- Multiple student desktops/laptops (for in-house testing centers)  
+- Stable internet connection  
+- Open communication with dev team during setup and onboarding  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment  
+This system is deployable as a white-label solution with support for custom domains and branded email.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For deployment assistance, custom builds, pricing, or demos, please contact us below.
+
+## Contact  
+**Phenomenal Productions**  
+4, Taiwo Oladiran Street, Agunbelewo, 
+Osogbo, Osun State, Nigeria  
+📞 +234 808 679 2440  
+✉️ abiodunojo453@gmail.com  
+
+---
+
+© 2025 Phenomenal Productions. All rights reserved.
